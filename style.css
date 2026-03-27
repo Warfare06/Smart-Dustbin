@@ -6,68 +6,25 @@ body {
 }
 
 .streets button {
-    padding: 8px 12px;
-    margin: 5px;
-}
-
-.street-bins {
-    display: flex;
-    justify-content: center;
-    gap: 20px;
-    margin: 20px;
-}
-
-.small-bin {
-    width: 40px;
-    height: 60px;
-    background: gray;
-    border: 2px solid white;
-    cursor: pointer;
-}
-
-.small-bin:hover {
-    background: orange;
-}
-
-.info {
+    padding: 10px;
     margin: 10px;
 }
 
-.bin-container {
-    width: 150px;
-    margin: 40px auto;
-    position: relative;
+.bins-container {
+    display: flex;
+    justify-content: center;
+    gap: 40px;
+    margin-top: 30px;
 }
 
-.bin-body {
-    width: 150px;
-    height: 220px;
-    border: 4px solid #aaa;
-    background: black;
-    position: relative;
-    overflow: hidden;
+.bin-card {
+    text-align: center;
 }
 
-.fill {
-    position: absolute;
-    bottom: 0;
-    width: 100%;
-    height: 0%;
-    background: green;
-    transition: height 0.5s;
-}
-
-.lid {
-    width: 150px;
-    height: 30px;
-    background: #aaa;
-    position: absolute;
-    top: -30px;
-    transform-origin: left center;
-    transition: transform 0.5s;
-}
-
-button {
-    padding: 10px 15px;
-    margin: 5px;
+.bin {
+    width: 60px;
+    height: 90px;
+    background: gray;
+    border: 3px solid white;
+    margin-bottom: 10px;
 }
