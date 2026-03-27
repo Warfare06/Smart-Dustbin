@@ -27,7 +27,6 @@ function setBinFill(fillId, level) {
     else
         document.getElementById(fillId).style.background = "red";
 }
-
 function loadStreetData() {
     db.ref("smart_city/" + currentStreet)
       .on("value", function(snapshot) {
