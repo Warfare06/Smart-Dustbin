@@ -38,3 +38,8 @@ body {
     transform-origin: left center;
     transition: transform 0.5s;
 }
+.bin-container {
+    width: 150px;
+    margin: 40px auto;
+    position: relative;
+}
