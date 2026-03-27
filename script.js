@@ -1,3 +1,4 @@
+// Firebase Config
 const firebaseConfig = {
   apiKey: "AIzaSyBowxOjZiwCQdBIsmPigIdKRGjY6ObVtKQ",
   authDomain: "smart-dustbin-b43d8.firebaseapp.com",
@@ -14,6 +15,8 @@ const db = firebase.database();
 
 let currentStreet = "street1";
 let chart;
+let map;
+let routeLine;
 
 // Select Street
 function selectStreet(street) {
@@ -23,64 +26,38 @@ function selectStreet(street) {
     loadStreetData();
 }
 
-let map;
-let directionsService;
-let directionsRenderer;
-
-// Initialize Map
-let map;
-
+// Initialize Leaflet Map (VIT Chennai Area)
 function initMap() {
-    // Center map near VIT Chennai
     map = L.map('map').setView([12.8406, 80.1533], 15);
 
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
         attribution: 'OpenStreetMap'
     }).addTo(map);
 
-    // Example streets around VIT Chennai
+    drawRoute();
+}
+
+// Draw Truck Route Near VIT
+function drawRoute() {
     var street1 = [12.8406, 80.1533];
     var street2 = [12.8425, 80.1500];
     var street3 = [12.8380, 80.1565];
     var street4 = [12.8365, 80.1520];
 
-    // Markers
     L.marker(street1).addTo(map).bindPopup("Street 1");
     L.marker(street2).addTo(map).bindPopup("Street 2");
     L.marker(street3).addTo(map).bindPopup("Street 3");
     L.marker(street4).addTo(map).bindPopup("Street 4");
 
-    // Truck Route Line
-    var route = L.polyline([street1, street2, street3, street4], {
+    routeLine = L.polyline([street1, street2, street3, street4], {
         color: 'yellow',
         weight: 5
     }).addTo(map);
 
-    map.fitBounds(route.getBounds());
+    map.fitBounds(routeLine.getBounds());
 }
 
-function calculateBestRoute() {
-    const waypoints = [
-        { location: { lat: 12.9716, lng: 77.5946 } }, // Street 1
-        { location: { lat: 12.9616, lng: 77.5846 } }, // Street 2
-        { location: { lat: 12.9516, lng: 77.5746 } }, // Street 3
-        { location: { lat: 12.9416, lng: 77.5646 } }  // Street 4
-    ];
-
-    directionsService.route({
-        origin: waypoints[0].location,
-        destination: waypoints[waypoints.length - 1].location,
-        waypoints: waypoints.slice(1, -1),
-        optimizeWaypoints: true,
-        travelMode: 'DRIVING'
-    }, function(result, status) {
-        if (status === 'OK') {
-            directionsRenderer.setDirections(result);
-        }
-    });
-}
-
-// Bin Fill + Color
+// Bin Fill Animation + Color
 function setBinFill(fillId, level) {
     let fill = document.getElementById(fillId);
     fill.style.height = level + "%";
@@ -99,7 +76,7 @@ function setBinFill(fillId, level) {
     }
 }
 
-// Load Data from Firebase
+// Load Firebase Data
 function loadStreetData() {
     db.ref("smart_city/" + currentStreet)
       .on("value", function(snapshot) {
@@ -163,9 +140,7 @@ function updateChart(level) {
                 },
                 plugins: {
                     legend: {
-                        labels: {
-                            color: 'white'
-                        }
+                        labels: { color: 'white' }
                     }
                 }
             }
@@ -173,13 +148,12 @@ function updateChart(level) {
     }
 
     let time = new Date().toLocaleTimeString();
-
     chart.data.labels.push(time);
     chart.data.datasets[0].data.push(level);
     chart.update();
 }
 
-// Truck Route Optimization
+// Truck Route Optimization Console
 function calculateRoute(streetData) {
     let bins = [];
 
@@ -196,10 +170,8 @@ function calculateRoute(streetData) {
     bins.forEach(bin => console.log(bin.name));
 }
 
+// Load Everything
 window.onload = function() {
-    loadStreetData();
     initMap();
+    loadStreetData();
 };
-
-// Load Default
-loadStreetData();
