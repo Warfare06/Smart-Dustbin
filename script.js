@@ -8,12 +8,12 @@ const firebaseConfig = {
   appId: "1:795207450873:web:4f9f6a11f6fced31902228",
   measurementId: "G-5XSBSXF245"
 };
-// const firebaseConfig = {
-//   apiKey: "YOUR_API_KEY",
-//   authDomain: "smart-dustbin-b43d8.firebaseapp.com",
-//   databaseURL: "https://smart-dustbin-b43d8-default-rtdb.asia-southeast1.firebasedatabase.app",
-//   projectId: "smart-dustbin-b43d8"
-// };
+const firebaseConfig = {
+  apiKey: "YOUR_API_KEY",
+  authDomain: "smart-dustbin-b43d8.firebaseapp.com",
+  databaseURL: "https://smart-dustbin-b43d8-default-rtdb.asia-southeast1.firebasedatabase.app",
+  projectId: "smart-dustbin-b43d8"
+};
 
 firebase.initializeApp(firebaseConfig);
 const db = firebase.database();
