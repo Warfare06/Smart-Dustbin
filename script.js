@@ -9,7 +9,9 @@ firebase.initializeApp(firebaseConfig);
 const db = firebase.database();
 
 let currentStreet = "street1";
+let chart;
 
+// Select Street
 function selectStreet(street) {
     currentStreet = street;
     document.getElementById("streetTitle").innerText =
@@ -17,16 +19,26 @@ function selectStreet(street) {
     loadStreetData();
 }
 
+// Bin Fill + Color
 function setBinFill(fillId, level) {
-    document.getElementById(fillId).style.height = level + "%";
+    let fill = document.getElementById(fillId);
+    fill.style.height = level + "%";
 
-    if (level < 30)
-        document.getElementById(fillId).style.background = "green";
-    else if (level < 70)
-        document.getElementById(fillId).style.background = "yellow";
-    else
-        document.getElementById(fillId).style.background = "red";
+    if (level < 30) {
+        fill.style.background = "green";
+        fill.style.animation = "";
+    } 
+    else if (level < 70) {
+        fill.style.background = "yellow";
+        fill.style.animation = "";
+    } 
+    else {
+        fill.style.background = "red";
+        fill.style.animation = "blink 1s infinite";
+    }
 }
+
+// Load Data from Firebase
 function loadStreetData() {
     db.ref("smart_city/" + currentStreet)
       .on("value", function(snapshot) {
@@ -52,7 +64,54 @@ function loadStreetData() {
         document.getElementById("type4").innerText = data.bin4.waste_type;
         document.getElementById("status4").innerText = data.bin4.status;
         setBinFill("fill4", data.bin4.level);
+
+        updateChart(data.bin1.level);
+        calculateRoute(data);
     });
 }
 
+// Waste Graph
+function updateChart(level) {
+    const ctx = document.getElementById('wasteChart').getContext('2d');
+
+    if (!chart) {
+        chart = new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: [],
+                datasets: [{
+                    label: 'Waste Level %',
+                    data: [],
+                    borderColor: 'yellow',
+                    fill: false
+                }]
+            }
+        });
+    }
+
+    let time = new Date().toLocaleTimeString();
+
+    chart.data.labels.push(time);
+    chart.data.datasets[0].data.push(level);
+    chart.update();
+}
+
+// Truck Route Optimization
+function calculateRoute(streetData) {
+    let bins = [];
+
+    for (let bin in streetData) {
+        bins.push({
+            name: bin,
+            level: streetData[bin].level
+        });
+    }
+
+    bins.sort((a, b) => b.level - a.level);
+
+    console.log("Truck Route Order:");
+    bins.forEach(bin => console.log(bin.name));
+}
+
+// Load Default
 loadStreetData();
