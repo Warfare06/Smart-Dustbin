@@ -8,7 +8,6 @@
 
 <h1>Smart Street Waste Monitoring</h1>
 
-<!-- Street Buttons -->
 <div class="streets">
     <button onclick="selectStreet('street1')">Street 1</button>
     <button onclick="selectStreet('street2')">Street 2</button>
@@ -16,37 +15,37 @@
     <button onclick="selectStreet('street4')">Street 4</button>
 </div>
 
-<h3 id="streetTitle">Street 1 Bins</h3>
+<h2 id="streetTitle">Street 1</h2>
 
-<!-- Street Bins -->
-<div class="street-bins">
-    <div class="small-bin" onclick="selectBin('bin1')"></div>
-    <div class="small-bin" onclick="selectBin('bin2')"></div>
-    <div class="small-bin" onclick="selectBin('bin3')"></div>
-    <div class="small-bin" onclick="selectBin('bin4')"></div>
-</div>
+<div class="bins-container">
+    <div class="bin-card">
+        <div class="bin"></div>
+        <p>Level: <span id="level1">0</span>%</p>
+        <p>Type: <span id="type1">dry</span></p>
+        <p>Status: <span id="status1">not_full</span></p>
+    </div>
 
-<!-- Bin Info -->
-<div class="info">
-    <p>Level: <span id="level">0</span>%</p>
-    <p>Waste Type: <span id="waste_type">Dry</span></p>
-    <p>Status: <span id="status">Not Full</span></p>
-    <p>Moisture: <span id="moisture">0</span></p>
-</div>
+    <div class="bin-card">
+        <div class="bin"></div>
+        <p>Level: <span id="level2">0</span>%</p>
+        <p>Type: <span id="type2">dry</span></p>
+        <p>Status: <span id="status2">not_full</span></p>
+    </div>
 
-<!-- Bin Model -->
-<div class="bin-container">
-    <div class="lid" id="lid"></div>
-    <div class="bin-body">
-        <div class="fill" id="fillLevel"></div>
+    <div class="bin-card">
+        <div class="bin"></div>
+        <p>Level: <span id="level3">0</span>%</p>
+        <p>Type: <span id="type3">dry</span></p>
+        <p>Status: <span id="status3">not_full</span></p>
+    </div>
+
+    <div class="bin-card">
+        <div class="bin"></div>
+        <p>Level: <span id="level4">0</span>%</p>
+        <p>Type: <span id="type4">dry</span></p>
+        <p>Status: <span id="status4">not_full</span></p>
     </div>
 </div>
-
-<br>
-
-<button onclick="openBin()">Open Lid</button>
-<button onclick="closeBin()">Close Lid</button>
-<button onclick="sendAlert()">Send Alert</button>
 
 <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
 <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
