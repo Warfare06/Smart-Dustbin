@@ -40,11 +40,23 @@ function sendAlert() {
 }
 
 function openBin() {
+    // Lid animation
     document.getElementById("lid").style.transform = "rotate(-60deg)";
+
+    // Send command to Firebase
+    db.ref("smart_dustbin/" + currentBin + "/lid_command").set("open");
 }
 
 function closeBin() {
+    // Lid animation
     document.getElementById("lid").style.transform = "rotate(0deg)";
+
+    // Send command to Firebase
+    db.ref("smart_dustbin/" + currentBin + "/lid_command").set("close");
+}
+
+function sendAlert() {
+    db.ref("alerts/" + currentBin).set("FULL_BIN_ALERT");
 }
 
 selectBin("bin1");
