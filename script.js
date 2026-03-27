@@ -23,6 +23,44 @@ function selectStreet(street) {
     loadStreetData();
 }
 
+let map;
+let directionsService;
+let directionsRenderer;
+
+function initMap() {
+    map = new google.maps.Map(document.getElementById("map"), {
+        zoom: 13,
+        center: { lat: 12.9716, lng: 77.5946 }
+    });
+
+    directionsService = new google.maps.DirectionsService();
+    directionsRenderer = new google.maps.DirectionsRenderer();
+    directionsRenderer.setMap(map);
+
+    calculateBestRoute();
+}
+
+function calculateBestRoute() {
+    const waypoints = [
+        { location: { lat: 12.9716, lng: 77.5946 } }, // Street 1
+        { location: { lat: 12.9616, lng: 77.5846 } }, // Street 2
+        { location: { lat: 12.9516, lng: 77.5746 } }, // Street 3
+        { location: { lat: 12.9416, lng: 77.5646 } }  // Street 4
+    ];
+
+    directionsService.route({
+        origin: waypoints[0].location,
+        destination: waypoints[waypoints.length - 1].location,
+        waypoints: waypoints.slice(1, -1),
+        optimizeWaypoints: true,
+        travelMode: 'DRIVING'
+    }, function(result, status) {
+        if (status === 'OK') {
+            directionsRenderer.setDirections(result);
+        }
+    });
+}
+
 // Bin Fill + Color
 function setBinFill(fillId, level) {
     let fill = document.getElementById(fillId);
