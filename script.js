@@ -39,4 +39,12 @@ function sendAlert() {
     db.ref("alerts/" + currentBin).set("FULL_BIN_ALERT");
 }
 
+function openBin() {
+    document.getElementById("lid").style.transform = "rotate(-60deg)";
+}
+
+function closeBin() {
+    document.getElementById("lid").style.transform = "rotate(0deg)";
+}
+
 selectBin("bin1");
