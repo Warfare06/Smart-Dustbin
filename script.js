@@ -86,9 +86,31 @@ function updateChart(level) {
                 datasets: [{
                     label: 'Waste Level %',
                     data: [],
-                    borderColor: 'yellow',
-                    fill: false
+                    borderColor: '#00ffcc',
+                    backgroundColor: 'rgba(0,255,204,0.2)',
+                    borderWidth: 3,
+                    fill: true,
+                    tension: 0.3
                 }]
+            },
+            options: {
+                scales: {
+                    x: {
+                        ticks: { color: 'white' },
+                        grid: { color: '#444' }
+                    },
+                    y: {
+                        ticks: { color: 'white' },
+                        grid: { color: '#444' }
+                    }
+                },
+                plugins: {
+                    legend: {
+                        labels: {
+                            color: 'white'
+                        }
+                    }
+                }
             }
         });
     }
