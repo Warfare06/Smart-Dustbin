@@ -25,7 +25,18 @@
     <p>Status: <span id="status">Not Full</span></p>
     <p>Moisture: <span id="moisture">0</span></p>
 </div>
+<div class="bin-container">
+    <div class="lid" id="lid"></div>
+    <div class="bin-body">
+        <div class="fill" id="fillLevel"></div>
+    </div>
+</div>
 
+<br>
+
+<button onclick="openBin()">Open Lid</button>
+<button onclick="closeBin()">Close Lid</button>
+    
 <button onclick="openLid()">Open Lid</button>
 <button onclick="sendAlert()">Send Alert</button>
 
