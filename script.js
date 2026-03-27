@@ -29,17 +29,18 @@ let directionsRenderer;
 
 // Initialize Map
 function initMap() {
-    var map = L.map('map').setView([12.9716, 77.5946], 13);
+    // Center map on Chennai 600127
+    map = L.map('map').setView([12.8996, 80.1920], 14);
 
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
         attribution: 'OpenStreetMap'
     }).addTo(map);
 
-    // Street Locations
-    var street1 = [12.9716, 77.5946];
-    var street2 = [12.9616, 77.5846];
-    var street3 = [12.9516, 77.5746];
-    var street4 = [12.9416, 77.5646];
+    // Streets locations (example points around your area)
+    var street1 = [12.8996, 80.1920];
+    var street2 = [12.8950, 80.1880];
+    var street3 = [12.9030, 80.1980];
+    var street4 = [12.9070, 80.1900];
 
     // Markers
     L.marker(street1).addTo(map).bindPopup("Street 1");
@@ -47,7 +48,7 @@ function initMap() {
     L.marker(street3).addTo(map).bindPopup("Street 3");
     L.marker(street4).addTo(map).bindPopup("Street 4");
 
-    // Route Line (Truck Route)
+    // Truck Route
     var route = L.polyline([street1, street2, street3, street4], {
         color: 'yellow',
         weight: 5
