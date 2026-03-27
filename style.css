@@ -1,29 +1,40 @@
 body {
+    background: #0f172a;
+    color: white;
     text-align: center;
     font-family: Arial;
-    background: #1e1e2f;
-    color: white;
 }
 
-.bins button {
-    padding: 10px;
-    margin: 10px;
-    font-size: 16px;
-}
-
-.bin-model {
+.bin-container {
     width: 150px;
-    height: 250px;
-    border: 4px solid white;
     margin: auto;
     position: relative;
-    background: black;
+}
+
+.bin-body {
+    width: 150px;
+    height: 220px;
+    border: 4px solid #aaa;
+    background: #111;
+    position: relative;
+    overflow: hidden;
 }
 
 .fill {
     position: absolute;
     bottom: 0;
     width: 100%;
-    background: green;
     height: 0%;
+    background: green;
+    transition: height 0.5s;
+}
+
+.lid {
+    width: 150px;
+    height: 30px;
+    background: #aaa;
+    position: absolute;
+    top: -30px;
+    transform-origin: left center;
+    transition: transform 0.5s;
 }
