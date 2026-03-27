@@ -1,34 +1,33 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Smart Dustbin Dashboard</title>
+    <title>Smart Street Dustbin</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-<h1>Smart Dustbin Dashboard</h1>
+<h1>Smart Street Waste Monitoring</h1>
 
-<div class="card">
-    <h2>Waste Level</h2>
-    <p id="level">0%</p>
+<div class="bins">
+    <button onclick="selectBin('bin1')">Bin 1</button>
+    <button onclick="selectBin('bin2')">Bin 2</button>
+    <button onclick="selectBin('bin3')">Bin 3</button>
+    <button onclick="selectBin('bin4')">Bin 4</button>
 </div>
 
-<div class="card">
-    <h2>Waste Type</h2>
-    <p id="waste_type">Dry</p>
+<div class="bin-model">
+    <div class="fill" id="fillLevel"></div>
 </div>
 
-<div class="card">
-    <h2>Bin Status</h2>
-    <p id="status">Not Full</p>
-</div>
-
-<div class="card">
-    <h2>Lid Status</h2>
-    <p id="lid_status">Closed</p>
+<div class="info">
+    <p>Level: <span id="level">0</span>%</p>
+    <p>Waste Type: <span id="waste_type">Dry</span></p>
+    <p>Status: <span id="status">Not Full</span></p>
+    <p>Moisture: <span id="moisture">0</span></p>
 </div>
 
 <button onclick="openLid()">Open Lid</button>
+<button onclick="sendAlert()">Send Alert</button>
 
 <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
 <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
