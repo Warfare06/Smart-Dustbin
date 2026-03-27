@@ -1,13 +1,14 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Smart Street Dustbin</title>
+    <title>Smart Street Waste Monitoring</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
 <h1>Smart Street Waste Monitoring</h1>
 
+<!-- Street Buttons -->
 <div class="streets">
     <button onclick="selectStreet('street1')">Street 1</button>
     <button onclick="selectStreet('street2')">Street 2</button>
@@ -15,23 +16,25 @@
     <button onclick="selectStreet('street4')">Street 4</button>
 </div>
 
-<div class="bins">
-    <button onclick="selectBin('bin1')">Bin 1</button>
-    <button onclick="selectBin('bin2')">Bin 2</button>
-    <button onclick="selectBin('bin3')">Bin 3</button>
-    <button onclick="selectBin('bin4')">Bin 4</button>
-</div>
-    
-<div class="bin-model">
-    <div class="fill" id="fillLevel"></div>
+<h3 id="streetTitle">Street 1 Bins</h3>
+
+<!-- Street Bins -->
+<div class="street-bins">
+    <div class="small-bin" onclick="selectBin('bin1')"></div>
+    <div class="small-bin" onclick="selectBin('bin2')"></div>
+    <div class="small-bin" onclick="selectBin('bin3')"></div>
+    <div class="small-bin" onclick="selectBin('bin4')"></div>
 </div>
 
+<!-- Bin Info -->
 <div class="info">
     <p>Level: <span id="level">0</span>%</p>
     <p>Waste Type: <span id="waste_type">Dry</span></p>
     <p>Status: <span id="status">Not Full</span></p>
     <p>Moisture: <span id="moisture">0</span></p>
 </div>
+
+<!-- Bin Model -->
 <div class="bin-container">
     <div class="lid" id="lid"></div>
     <div class="bin-body">
@@ -44,7 +47,6 @@
 <button onclick="openBin()">Open Lid</button>
 <button onclick="closeBin()">Close Lid</button>
 <button onclick="sendAlert()">Send Alert</button>
-
 
 <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
 <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
