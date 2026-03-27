@@ -19,14 +19,14 @@ const firebaseConfig = {
 firebase.initializeApp(firebaseConfig);
 const db = firebase.database();
 
-let currentStreet = "street1";
+let currentStreet = "street 1";
 let currentBin = "bin1";
 
 function selectStreet(street) {
     currentStreet = street;
 
     document.getElementById("streetTitle").innerText =
-        street.replace("street", "Street ") + " Bins";
+        street.replace("street ", "Street ") + " Bins";
 
     loadStreetBins();
     loadData();
