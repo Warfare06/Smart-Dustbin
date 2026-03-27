@@ -139,5 +139,10 @@ function calculateRoute(streetData) {
     bins.forEach(bin => console.log(bin.name));
 }
 
+window.onload = function() {
+    loadStreetData();
+    initMap();
+};
+
 // Load Default
 loadStreetData();
