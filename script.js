@@ -28,19 +28,21 @@ let directionsService;
 let directionsRenderer;
 
 // Initialize Map
+let map;
+
 function initMap() {
-    // Center map on Chennai 600127
-    map = L.map('map').setView([12.8996, 80.1920], 14);
+    // Center map near VIT Chennai
+    map = L.map('map').setView([12.8406, 80.1533], 15);
 
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
         attribution: 'OpenStreetMap'
     }).addTo(map);
 
-    // Streets locations (example points around your area)
-    var street1 = [12.8996, 80.1920];
-    var street2 = [12.8950, 80.1880];
-    var street3 = [12.9030, 80.1980];
-    var street4 = [12.9070, 80.1900];
+    // Example streets around VIT Chennai
+    var street1 = [12.8406, 80.1533];
+    var street2 = [12.8425, 80.1500];
+    var street3 = [12.8380, 80.1565];
+    var street4 = [12.8365, 80.1520];
 
     // Markers
     L.marker(street1).addTo(map).bindPopup("Street 1");
@@ -48,7 +50,7 @@ function initMap() {
     L.marker(street3).addTo(map).bindPopup("Street 3");
     L.marker(street4).addTo(map).bindPopup("Street 4");
 
-    // Truck Route
+    // Truck Route Line
     var route = L.polyline([street1, street2, street3, street4], {
         color: 'yellow',
         weight: 5
