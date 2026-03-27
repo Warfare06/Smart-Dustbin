@@ -8,91 +8,47 @@ const firebaseConfig = {
   appId: "1:795207450873:web:4f9f6a11f6fced31902228",
   measurementId: "G-5XSBSXF245"
 };
-
 // const firebaseConfig = {
 //   apiKey: "YOUR_API_KEY",
 //   authDomain: "smart-dustbin-b43d8.firebaseapp.com",
 //   databaseURL: "https://smart-dustbin-b43d8-default-rtdb.asia-southeast1.firebasedatabase.app",
-//   projectId: "smart-dustbin-b43d8",
+//   projectId: "smart-dustbin-b43d8"
 // };
 
 firebase.initializeApp(firebaseConfig);
 const db = firebase.database();
 
-let currentStreet = "street 1";
-let currentBin = "bin1";
+let currentStreet = "street1";
 
 function selectStreet(street) {
     currentStreet = street;
-
     document.getElementById("streetTitle").innerText =
-        street.replace("street ", "Street ") + " Bins";
-
-    loadStreetBins();
-    loadData();
+        street.replace("street", "Street ");
+    loadStreetData();
 }
 
-function selectBin(bin) {
-    currentBin = bin;
-    loadData();
-}
-
-function loadStreetBins() {
-    const bins = document.getElementsByClassName("small-bin");
-
-    db.ref("smart_city/" + currentStreet).once("value", function(snapshot) {
-        const streetData = snapshot.val();
-        let i = 0;
-
-        for (let bin in streetData) {
-            let level = streetData[bin].level;
-
-            if (level < 30) bins[i].style.background = "green";
-            else if (level < 70) bins[i].style.background = "yellow";
-            else bins[i].style.background = "red";
-
-            i++;
-        }
-    });
-}
-
-function loadData() {
-    db.ref("smart_city/" + currentStreet + "/" + currentBin)
+function loadStreetData() {
+    db.ref("smart_city/" + currentStreet)
       .on("value", function(snapshot) {
 
         const data = snapshot.val();
 
-        if (data) {
-            document.getElementById("level").innerText = data.level;
-            document.getElementById("waste_type").innerText = data.waste_type;
-            document.getElementById("status").innerText = data.status;
-            document.getElementById("moisture").innerText = data.moisture_value;
+        document.getElementById("level1").innerText = data.bin1.level;
+        document.getElementById("type1").innerText = data.bin1.waste_type;
+        document.getElementById("status1").innerText = data.bin1.status;
 
-            document.getElementById("fillLevel").style.height = data.level + "%";
+        document.getElementById("level2").innerText = data.bin2.level;
+        document.getElementById("type2").innerText = data.bin2.waste_type;
+        document.getElementById("status2").innerText = data.bin2.status;
 
-            if (data.lid_status === "open") {
-                document.getElementById("lid").style.transform = "rotate(-60deg)";
-            } else {
-                document.getElementById("lid").style.transform = "rotate(0deg)";
-            }
-        }
+        document.getElementById("level3").innerText = data.bin3.level;
+        document.getElementById("type3").innerText = data.bin3.waste_type;
+        document.getElementById("status3").innerText = data.bin3.status;
+
+        document.getElementById("level4").innerText = data.bin4.level;
+        document.getElementById("type4").innerText = data.bin4.waste_type;
+        document.getElementById("status4").innerText = data.bin4.status;
     });
 }
 
-function openBin() {
-    document.getElementById("lid").style.transform = "rotate(-60deg)";
-    db.ref("smart_city/" + currentStreet + "/" + currentBin + "/lid_command").set("open");
-}
-
-function closeBin() {
-    document.getElementById("lid").style.transform = "rotate(0deg)";
-    db.ref("smart_city/" + currentStreet + "/" + currentBin + "/lid_command").set("close");
-}
-
-function sendAlert() {
-    db.ref("alerts/" + currentStreet + "_" + currentBin).set("FULL_BIN_ALERT");
-    alert("Alert sent!");
-}
-
-loadStreetBins();
-loadData();
+loadStreetData();
