@@ -21,9 +21,7 @@
 
     <div class="bin-card">
         <div class="lid"></div>
-        <div class="bin">
-            <div class="fill" id="fill1"></div>
-        </div>
+        <div class="bin"><div class="fill" id="fill1"></div></div>
         <p>Level: <span id="level1">0</span>%</p>
         <p>Type: <span id="type1">dry</span></p>
         <p>Status: <span id="status1">not_full</span></p>
@@ -31,9 +29,7 @@
 
     <div class="bin-card">
         <div class="lid"></div>
-        <div class="bin">
-            <div class="fill" id="fill2"></div>
-        </div>
+        <div class="bin"><div class="fill" id="fill2"></div></div>
         <p>Level: <span id="level2">0</span>%</p>
         <p>Type: <span id="type2">dry</span></p>
         <p>Status: <span id="status2">not_full</span></p>
@@ -41,9 +37,7 @@
 
     <div class="bin-card">
         <div class="lid"></div>
-        <div class="bin">
-            <div class="fill" id="fill3"></div>
-        </div>
+        <div class="bin"><div class="fill" id="fill3"></div></div>
         <p>Level: <span id="level3">0</span>%</p>
         <p>Type: <span id="type3">dry</span></p>
         <p>Status: <span id="status3">not_full</span></p>
@@ -51,9 +45,7 @@
 
     <div class="bin-card">
         <div class="lid"></div>
-        <div class="bin">
-            <div class="fill" id="fill4"></div>
-        </div>
+        <div class="bin"><div class="fill" id="fill4"></div></div>
         <p>Level: <span id="level4">0</span>%</p>
         <p>Type: <span id="type4">dry</span></p>
         <p>Status: <span id="status4">not_full</span></p>
@@ -61,6 +53,10 @@
 
 </div>
 
+<h2>Daily Waste Graph</h2>
+<canvas id="wasteChart" width="500" height="200"></canvas>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
 <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
 <script src="script.js"></script>
