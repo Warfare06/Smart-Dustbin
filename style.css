@@ -21,29 +21,6 @@ body {
     text-align: center;
 }
 
-body {
-    background: #0f1c3f;
-    color: white;
-    text-align: center;
-    font-family: Arial;
-}
-
-.streets button {
-    padding: 10px;
-    margin: 10px;
-}
-
-.bins-container {
-    display: flex;
-    justify-content: center;
-    gap: 60px;
-    margin-top: 30px;
-}
-
-.bin-card {
-    text-align: center;
-}
-
 .lid {
     width: 70px;
     height: 15px;
@@ -69,4 +46,10 @@ body {
     height: 0%;
     background: green;
     transition: height 0.5s;
+}
+
+@keyframes blink {
+    0% { opacity: 1; }
+    50% { opacity: 0.3; }
+    100% { opacity: 1; }
 }
