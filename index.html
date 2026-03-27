@@ -1,3 +1,22 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Smart Street Waste Monitoring</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<h1>Smart Street Waste Monitoring</h1>
+
+<div class="streets">
+    <button onclick="selectStreet('street1')">Street 1</button>
+    <button onclick="selectStreet('street2')">Street 2</button>
+    <button onclick="selectStreet('street3')">Street 3</button>
+    <button onclick="selectStreet('street4')">Street 4</button>
+</div>
+
+<h2 id="streetTitle">Street 1</h2>
+
 <div class="bins-container">
 
     <div class="bin-card">
@@ -29,3 +48,10 @@
     </div>
 
 </div>
+
+<script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
+<script src="script.js"></script>
+
+</body>
+</html>
