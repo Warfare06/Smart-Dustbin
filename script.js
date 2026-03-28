@@ -10,6 +10,7 @@ const firebaseConfig = {
 firebase.initializeApp(firebaseConfig);
 const db = firebase.database();
 
+
 // 2. Global Variables
 let currentStreet = "street1";
 let chart;
