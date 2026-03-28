@@ -7,7 +7,11 @@
 }
 
 body {
-    background-color: var(--bg-dark);
+    background-color: #0b1120; /* Deepest dark blue/black */
+    background-image: 
+        linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px);
+    background-size: 30px 30px; /* Size of the grid squares */
     color: white;
     font-family: 'Inter', 'Segoe UI', sans-serif;
     margin: 0;
