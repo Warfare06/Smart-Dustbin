@@ -1,148 +1,113 @@
+:root {
+    --primary: #00d2ff;
+    --danger: #ff4d4d;
+    --success: #2ecc71;
+    --bg-dark: #0f172a;
+    --card-bg: rgba(30, 41, 59, 0.7);
+}
+
 body {
-    background: linear-gradient(135deg, #0f1c3f, #08122e);
+    background-color: var(--bg-dark);
     color: white;
-    text-align: center;
-    font-family: 'Segoe UI', Arial;
+    font-family: 'Inter', 'Segoe UI', sans-serif;
     margin: 0;
+    padding-bottom: 50px;
 }
 
-/* Header */
-h1 {
-    background: #08122e;
-    padding: 15px;
-    margin: 0;
-    letter-spacing: 1px;
-}
+h1 { padding: 20px; background: rgba(0,0,0,0.3); margin: 0; text-transform: uppercase; letter-spacing: 2px; }
 
-/* Street Buttons */
+/* Navigation */
+.streets { margin: 20px 0; }
 .streets button {
-    padding: 12px 20px;
-    margin: 10px;
-    background: linear-gradient(45deg, #1e90ff, #00c6ff);
-    border: none;
-    color: white;
-    font-size: 16px;
-    border-radius: 8px;
+    padding: 10px 25px;
+    margin: 5px;
+    border: 1px solid var(--primary);
+    background: transparent;
+    color: var(--primary);
+    border-radius: 5px;
     cursor: pointer;
     transition: 0.3s;
 }
+.streets button:hover { background: var(--primary); color: white; box-shadow: 0 0 15px var(--primary); }
 
-.streets button:hover {
-    transform: scale(1.05);
-}
-
-/* Bin Layout */
+/* Bin Visualization */
 .bins-container {
     display: flex;
     justify-content: center;
-    gap: 40px;
-    margin-top: 30px;
+    gap: 20px;
+    flex-wrap: wrap;
+    margin: 30px auto;
 }
 
 .bin-card {
-    background: rgba(255,255,255,0.05);
-    padding: 15px;
-    border-radius: 12px;
-    width: 130px;
-    backdrop-filter: blur(10px);
-    box-shadow: 0 0 15px rgba(0,0,0,0.5);
+    background: var(--card-bg);
+    padding: 20px;
+    border-radius: 15px;
+    width: 150px;
+    border: 1px solid rgba(255,255,255,0.1);
 }
 
-/* Bin Lid */
-.lid {
-    width: 70px;
-    height: 15px;
-    background: gray;
-    margin: auto;
-    border: 2px solid white;
-}
-
-/* Bin */
 .bin {
-    width: 70px;
-    height: 110px;
-    border: 3px solid white;
+    width: 60px;
+    height: 100px;
+    border: 3px solid #cbd5e1;
+    margin: 15px auto;
     position: relative;
-    background: black;
+    border-radius: 0 0 8px 8px;
+    background: #000;
     overflow: hidden;
-    margin: 10px auto;
-    border-radius: 4px;
 }
 
 .fill {
     position: absolute;
     bottom: 0;
     width: 100%;
-    height: 0%;
-    background: green;
-    transition: height 0.5s;
+    transition: height 0.8s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-/* Blink Animation */
-@keyframes blink {
+.blink-animation { animation: blink-red 1s infinite; }
+@keyframes blink-red {
     0% { opacity: 1; }
-    50% { opacity: 0.3; }
+    50% { opacity: 0.5; }
     100% { opacity: 1; }
 }
 
-/* Graph */
-#wasteChart {
-    background: rgba(255,255,255,0.05);
-    padding: 15px;
-    border-radius: 12px;
-}
-
-/* Map */
+/* Map & Charts */
 #map {
+    height: 450px;
     width: 90%;
-    height: 400px;
     margin: 20px auto;
-    border-radius: 12px;
+    border-radius: 15px;
+    border: 2px solid var(--primary);
 }
 
-/* Dashboard Cards */
+.graph-container {
+    width: 80%;
+    margin: auto;
+    background: var(--card-bg);
+    padding: 20px;
+    border-radius: 15px;
+}
+
+/* Dashboard */
 .dashboard {
-    display: flex;
-    justify-content: center;
-    gap: 20px;
-    margin: 30px;
-    flex-wrap: wrap;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 15px;
+    padding: 20px 5%;
 }
 
 .card {
-    width: 180px;
-    padding: 20px;
+    padding: 15px;
     border-radius: 12px;
     text-align: center;
-    font-size: 18px;
-    box-shadow: 0 0 15px rgba(0,0,0,0.5);
-    transition: transform 0.2s;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.3);
 }
 
-.card:hover {
-    transform: scale(1.07);
-}
+.card p { font-size: 1.5rem; margin: 10px 0 0; }
 
-.card h3 {
-    margin-bottom: 10px;
-}
-
-.card p {
-    font-size: 28px;
-    font-weight: bold;
-}
-
-/* Card Colors */
-.prediction { background: linear-gradient(45deg, #6c5ce7, #a29bfe); }
-.avg { background: linear-gradient(45deg, #00b894, #55efc4); }
-.full { background: linear-gradient(45deg, #d63031, #ff7675); }
-.dry { background: linear-gradient(45deg, #fdcb6e, #ffeaa7); color: black; }
-.wet { background: linear-gradient(45deg, #0984e3, #74b9ff); }
-
-/* Responsive */
-@media (max-width: 768px) {
-    .bins-container {
-        flex-direction: column;
-        align-items: center;
-    }
-}
+.prediction { background: #6366f1; }
+.avg { background: #10b981; }
+.full { background: #ef4444; }
+.dry { background: #f59e0b; }
+.wet { background: #3b82f6; }
