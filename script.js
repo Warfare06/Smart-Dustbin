@@ -34,42 +34,61 @@ function initMap() {
 }
 
 // 4. Draw Optimized Route (Logic: Fullest Bins First)
+// 4. Draw Optimized Route (Logic: Fullest Bins First)
 function drawOptimizedRoute(data) {
-    // 1. Structure your JSON data into an array with fallbacks
+    // 0. Safety Check: Make sure we actually have data!
+    if (!data) {
+        console.error("No data received from Firebase for mapping.");
+        return; 
+    }
+
+    // 1. Structure JSON data. If a bin is missing, default it to 0% so the code doesn't crash.
     let binArray = [
-        { id: "Bin 1", level: data.bin1 ? data.bin1.level : 0, coord: [12.8406, 80.1533] },
-        { id: "Bin 2", level: data.bin2 ? data.bin2.level : 0, coord: [12.8425, 80.1500] },
-        { id: "Bin 3", level: data.bin3 ? data.bin3.level : 0, coord: [12.8380, 80.1565] },
-        { id: "Bin 4", level: data.bin4 ? data.bin4.level : 0, coord: [12.8365, 80.1520] }
+        { id: "Bin 1", level: data.bin1 && data.bin1.level ? data.bin1.level : 0, coord: [12.8406, 80.1533] },
+        { id: "Bin 2", level: data.bin2 && data.bin2.level ? data.bin2.level : 0, coord: [12.8425, 80.1500] },
+        { id: "Bin 3", level: data.bin3 && data.bin3.level ? data.bin3.level : 0, coord: [12.8380, 80.1565] },
+        { id: "Bin 4", level: data.bin4 && data.bin4.level ? data.bin4.level : 0, coord: [12.8365, 80.1520] }
     ];
+
+    console.log("Sorting these bins for the route:", binArray);
 
     // 2. Sort bins from Highest (Fullest) to Lowest
     binArray.sort((a, b) => b.level - a.level);
 
-    // 3. Clear previous lines and markers to prevent overlapping
-    if (routeLine) map.removeLayer(routeLine);
+    // 3. Clear previous lines and markers
+    if (routeLine) {
+        map.removeLayer(routeLine);
+    }
     markers.forEach(m => map.removeLayer(m));
     markers = [];
 
     // 4. Extract ordered coordinates
     let routePath = binArray.map(b => b.coord);
 
-    // 5. Draw the Route Line FIRST and add it to the map
+    // 5. Draw the Route Line FIRST
     routeLine = L.polyline(routePath, {
         color: '#00d2ff', 
         weight: 5,
         opacity: 0.8
     }).addTo(map);
 
-    // 6. THEN add the arrowheads to the line
-    routeLine.arrowheads({
-        size: '20px',             
-        frequency: 'allvertices', 
-        fill: true,
-        color: '#ff4d4d'          
-    });
+    // 6. Attempt to add Arrowheads (Wrapped in a try-catch in case the library fails)
+    try {
+        if (typeof routeLine.arrowheads === 'function') {
+            routeLine.arrowheads({
+                size: '20px',             
+                frequency: 'allvertices', 
+                fill: true,
+                color: '#ff4d4d'          
+            });
+        } else {
+            console.warn("Arrowheads library not loaded correctly. Drawing line without arrows.");
+        }
+    } catch (error) {
+        console.error("Arrowhead error:", error);
+    }
 
-    // 7. Add Map Markers with "Stop Number"
+    // 7. Add Map Markers
     binArray.forEach((bin, index) => {
         let marker = L.marker(bin.coord).addTo(map);
         
@@ -83,7 +102,7 @@ function drawOptimizedRoute(data) {
         markers.push(marker);
     });
 
-    // 8. Auto-center the map to fit the whole route
+    // 8. Auto-center the map
     if (routePath.length > 0) {
         map.fitBounds(routeLine.getBounds(), { padding: [50, 50] });
     }
