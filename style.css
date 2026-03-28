@@ -1,8 +1,8 @@
 body {
-    background: #0f1c3f;
+    background: linear-gradient(135deg, #0f1c3f, #08122e);
     color: white;
     text-align: center;
-    font-family: Arial;
+    font-family: 'Segoe UI', Arial;
     margin: 0;
 }
 
@@ -11,38 +11,41 @@ h1 {
     background: #08122e;
     padding: 15px;
     margin: 0;
+    letter-spacing: 1px;
 }
 
 /* Street Buttons */
 .streets button {
     padding: 12px 20px;
     margin: 10px;
-    background: #1e90ff;
+    background: linear-gradient(45deg, #1e90ff, #00c6ff);
     border: none;
     color: white;
     font-size: 16px;
-    border-radius: 6px;
+    border-radius: 8px;
     cursor: pointer;
+    transition: 0.3s;
 }
 
 .streets button:hover {
-    background: #0b6edc;
+    transform: scale(1.05);
 }
 
 /* Bin Layout */
 .bins-container {
     display: flex;
     justify-content: center;
-    gap: 50px;
+    gap: 40px;
     margin-top: 30px;
 }
 
 .bin-card {
-    background: #162447;
+    background: rgba(255,255,255,0.05);
     padding: 15px;
-    border-radius: 10px;
-    width: 120px;
-    box-shadow: 0 0 10px rgba(0,0,0,0.5);
+    border-radius: 12px;
+    width: 130px;
+    backdrop-filter: blur(10px);
+    box-shadow: 0 0 15px rgba(0,0,0,0.5);
 }
 
 /* Bin Lid */
@@ -63,6 +66,7 @@ h1 {
     background: black;
     overflow: hidden;
     margin: 10px auto;
+    border-radius: 4px;
 }
 
 .fill {
@@ -83,32 +87,26 @@ h1 {
 
 /* Graph */
 #wasteChart {
-    background: #162447;
-    padding: 10px;
-    border-radius: 10px;
+    background: rgba(255,255,255,0.05);
+    padding: 15px;
+    border-radius: 12px;
 }
 
 /* Map */
 #map {
-    border: 3px solid white;
-    border-radius: 10px;
+    width: 90%;
+    height: 400px;
+    margin: 20px auto;
+    border-radius: 12px;
 }
 
-/* Statistics Panel */
-.stats {
-    background: #162447;
-    margin: 20px auto;
-    padding: 15px;
-    width: 300px;
-    border-radius: 10px;
-    box-shadow: 0 0 10px rgba(0,0,0,0.5);
-}
+/* Dashboard Cards */
 .dashboard {
     display: flex;
     justify-content: center;
-    flex-wrap: wrap;
     gap: 20px;
     margin: 30px;
+    flex-wrap: wrap;
 }
 
 .card {
@@ -122,7 +120,7 @@ h1 {
 }
 
 .card:hover {
-    transform: scale(1.05);
+    transform: scale(1.07);
 }
 
 .card h3 {
@@ -134,21 +132,14 @@ h1 {
     font-weight: bold;
 }
 
-/* Different Colors */
-.prediction { background: #6c5ce7; }
-.avg { background: #00b894; }
-.full { background: #d63031; }
-.dry { background: #fdcb6e; color: black; }
-.wet { background: #0984e3; }
+/* Card Colors */
+.prediction { background: linear-gradient(45deg, #6c5ce7, #a29bfe); }
+.avg { background: linear-gradient(45deg, #00b894, #55efc4); }
+.full { background: linear-gradient(45deg, #d63031, #ff7675); }
+.dry { background: linear-gradient(45deg, #fdcb6e, #ffeaa7); color: black; }
+.wet { background: linear-gradient(45deg, #0984e3, #74b9ff); }
 
-/* Prediction */
-#prediction {
-    font-size: 22px;
-    color: #00ffcc;
-    font-weight: bold;
-}
-
-/* Responsive for mobile */
+/* Responsive */
 @media (max-width: 768px) {
     .bins-container {
         flex-direction: column;
