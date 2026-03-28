@@ -36,58 +36,62 @@ function initMap() {
 
 // 4. Draw Optimized Route (Logic: Fullest Bins First)
 function drawOptimizedRoute(data) {
-    // Define coordinates (In a real app, these would come from Firebase too)
-    let binCoords = {
-        bin1: [12.8406, 80.1533],
-        bin2: [12.8425, 80.1500],
-        bin3: [12.8380, 80.1565],
-        bin4: [12.8365, 80.1520]
-    };
+    // 1. Structure your JSON data into an array
+    // Assuming your JSON has coordinates, or you can hardcode them here
+    let binArray = [
+        { id: "Bin 1", level: data.bin1.level, coord: [12.8406, 80.1533] },
+        { id: "Bin 2", level: data.bin2.level, coord: [12.8425, 80.1500] },
+        { id: "Bin 3", level: data.bin3.level, coord: [12.8380, 80.1565] },
+        { id: "Bin 4", level: data.bin4.level, coord: [12.8365, 80.1520] }
+    ];
 
-    // Create array of objects for sorting
-    let binArray = [];
-    for (let i = 1; i <= 4; i++) {
-        binArray.push({
-            id: `Bin ${i}`,
-            level: data[`bin${i}`].level,
-            coord: binCoords[`bin${i}`]
-        });
-    }
-
-    // SORTING: Priority to bins > 70%, then by level descending
+    // 2. THE MAGIC: Sort bins from Highest (Fullest) to Lowest
     binArray.sort((a, b) => b.level - a.level);
 
-    // Clear existing map layers
+    // 3. Clear previous lines and markers to prevent overlapping
     if (routeLine) map.removeLayer(routeLine);
     markers.forEach(m => map.removeLayer(m));
     markers = [];
 
+    // 4. Extract just the ordered coordinates for the polyline
     let routePath = binArray.map(b => b.coord);
 
-    // Draw Route with Arrowheads
+    // 5. Draw the Route Line
     routeLine = L.polyline(routePath, {
-        color: '#00d2ff',
+        color: '#00d2ff', // A nice neon blue to match your UI
         weight: 5,
-        opacity: 0.7,
-        dashArray: '10, 10'
+        opacity: 0.8,
+        dashArray: '10, 10' // Makes it a dashed line (optional)
     }).addTo(map);
 
+    // 6. ADD ARROWHEADS
     routeLine.arrowheads({
-        size: '15px',
-        frequency: 'allvertices',
-        fill: true
+        size: '18px',              // Make arrows big enough to see
+        frequency: 'allvertices',  // Places an arrow pointing at every single bin stop
+        fill: true,
+        color: '#ff4d4d'           // Red arrows for visibility
     });
 
-    // Add Markers
+    // 7. Add Map Markers with "Stop Number"
     binArray.forEach((bin, index) => {
         let marker = L.marker(bin.coord).addTo(map);
-        marker.bindPopup(`<b>Stop ${index + 1}: ${bin.id}</b><br>Level: ${bin.level}%`);
+        
+        // The popup tells the driver which stop this is
+        marker.bindPopup(`
+            <div style="text-align:center;">
+                <b>Stop #${index + 1}</b><br>
+                ${bin.id}<br>
+                Level: <b>${bin.level}%</b>
+            </div>
+        `);
         markers.push(marker);
     });
 
-    map.fitBounds(routeLine.getBounds(), { padding: [50, 50] });
+    // 8. Auto-center the map to fit the whole route
+    if (routePath.length > 0) {
+        map.fitBounds(routeLine.getBounds(), { padding: [50, 50] });
+    }
 }
-
 // 5. Update UI Components
 function updateUI(data) {
     for (let i = 1; i <= 4; i++) {
