@@ -39,7 +39,7 @@ function initMap() {
     }).addTo(map);
 }
 
-// Draw Optimized Route
+// Draw Optimized Route with Markers + Arrows
 function drawOptimizedRoute(streetData) {
     let streets = [
         { name: "Bin 1", coord: [12.8406, 80.1533], level: streetData.bin1.level },
@@ -70,41 +70,51 @@ function drawOptimizedRoute(streetData) {
 
     // Add arrows
     routeLine.arrowheads({
-        size: '20px',
-        frequency: '50px'
+        size: '15px',
+        frequency: '60px'
     });
 
-    // Add markers for bins
+    // Add markers
     streets.forEach((s, index) => {
         let marker = L.marker(s.coord).addTo(map);
-        marker.bindPopup("Stop " + (index+1) + "<br>" + s.name + "<br>Level: " + s.level + "%");
+        marker.bindPopup(
+            "Stop " + (index+1) +
+            "<br>" + s.name +
+            "<br>Level: " + s.level + "%"
+        );
         markers.push(marker);
     });
 
-    // Fit map to route
     map.fitBounds(routeLine.getBounds());
 }
 
-// Bin Fill
+// Bin Fill Animation
 function setBinFill(fillId, level) {
     let fill = document.getElementById(fillId);
     fill.style.height = level + "%";
 
-    if (level < 30) fill.style.background = "green";
-    else if (level < 70) fill.style.background = "yellow";
+    if (level < 30) {
+        fill.style.background = "green";
+        fill.style.animation = "";
+    }
+    else if (level < 70) {
+        fill.style.background = "yellow";
+        fill.style.animation = "";
+    }
     else {
         fill.style.background = "red";
         fill.style.animation = "blink 1s infinite";
     }
 }
 
-// Prediction
+// Waste Prediction
 function predictWaste(avgLevel) {
     let growthRate = 5;
     let predicted = avgLevel + growthRate;
     if (predicted > 100) predicted = 100;
 
-    document.getElementById("prediction").innerText = predicted.toFixed(1) + "%";
+    document.getElementById("prediction").innerText =
+        predicted.toFixed(1) + "%";
 }
 
 // Full Bin Notification
@@ -117,7 +127,7 @@ function checkFullBins(data) {
     }
 }
 
-// Statistics
+// Statistics Dashboard
 function updateStatistics(data) {
     let levels = [
         data.bin1.level,
@@ -144,7 +154,7 @@ function updateStatistics(data) {
     document.getElementById("wetBins").innerText = wet;
 }
 
-// updateChart Waste Graph
+// Waste Graph
 function updateChart(level) {
     const ctx = document.getElementById('wasteChart').getContext('2d');
 
@@ -188,14 +198,15 @@ function updateChart(level) {
         let time = new Date().toLocaleTimeString();
         chart.data.labels.push(time);
         chart.data.datasets[0].data.push(level);
+
         if (chart.data.labels.length > 10) {
-          chart.data.labels.shift();
-          chart.data.datasets[0].data.shift();
+            chart.data.labels.shift();
+            chart.data.datasets[0].data.shift();
         }
-      chart.update();
+
+        chart.update();
     }
 }
-
 
 // Load Firebase Data
 function loadStreetData() {
@@ -214,7 +225,12 @@ function loadStreetData() {
         document.getElementById("level3").innerText = data.bin3.level;
         document.getElementById("level4").innerText = data.bin4.level;
 
-        let avg = (data.bin1.level + data.bin2.level + data.bin3.level + data.bin4.level) / 4;
+        let avg = (
+            data.bin1.level +
+            data.bin2.level +
+            data.bin3.level +
+            data.bin4.level
+        ) / 4;
 
         updateChart(avg);
         predictWaste(avg);
@@ -224,7 +240,7 @@ function loadStreetData() {
     });
 }
 
-// Start
+// Start System
 window.onload = function() {
     initMap();
     loadStreetData();
