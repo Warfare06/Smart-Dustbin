@@ -134,8 +134,8 @@ function updateChart(level) {
                 datasets: [{
                     label: 'Waste Level %',
                     data: [level],
-                    borderColor: '#00ffcc',
-                    backgroundColor: 'rgba(0,255,204,0.2)',
+                    borderColor: '#4cafef',
+                    backgroundColor: 'rgba(76,175,239,0.2)',
                     borderWidth: 3,
                     fill: true,
                     tension: 0.3
