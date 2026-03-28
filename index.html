@@ -1,12 +1,21 @@
 <!DOCTYPE html>
 <html>
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
     <title>Smart Street Waste Monitoring</title>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+    
     <link rel="stylesheet" href="style.css">
 
-    <!-- Leaflet Map CSS -->
-    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
 </head>
+    
 <body>
 
 <h1>Smart Street Waste Monitoring</h1>
@@ -81,11 +90,9 @@
     </div>
 
     <div class="card full">
-        <h3>Full Bins</h3>
+        <h3><i class="fa-solid fa-triangle-exclamation"></i> Full Bins</h3>
         <p id="fullBins">0</p>
     </div>
-
-
     <div class="card dry">
         <h3>Dry Waste</h3>
         <p id="dryBins">0</p>
@@ -98,6 +105,7 @@
 
 </div>
 
+    
 <!-- Scripts -->
 <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
 <script src="https://unpkg.com/leaflet-arrowheads@1.0.6/lib/leaflet-arrowheads.js"></script>
