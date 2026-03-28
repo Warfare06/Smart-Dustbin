@@ -47,7 +47,6 @@ function drawOptimizedRoute(streetData) {
         { name: "Bin 4", coord: [12.8365, 80.1520], level: streetData.bin4.level }
     ];
 
-    // Sort by level (Full bins first)
     streets.sort((a, b) => b.level - a.level);
 
     let routeCoords = streets.map(s => s.coord);
@@ -56,23 +55,21 @@ function drawOptimizedRoute(streetData) {
         map.removeLayer(routeLine);
     }
 
-    // Draw route
     routeLine = L.polyline(routeCoords, {
         color: 'red',
         weight: 6
     }).addTo(map);
 
-    // Add arrow direction
+    // Arrow direction
     routeLine.arrowheads({
-        size: '15px',
-        frequency: '100px'
+        size: '20px',
+        frequency: 'endonly'
     });
 
-    // Add markers
     streets.forEach(s => {
         L.marker(s.coord)
          .addTo(map)
-         .bindPopup(s.name + " - Level: " + s.level + "%");
+         .bindPopup(s.name + " Level: " + s.level + "%");
     });
 }
 // Bin Fill
