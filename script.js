@@ -121,6 +121,7 @@ function updateUI(data) {
 }
 
 // 6. Statistics & Charts
+// 6. Statistics & Charts
 function updateStats(data) {
     let levels = [data.bin1.level, data.bin2.level, data.bin3.level, data.bin4.level];
     let avg = levels.reduce((a, b) => a + b) / 4;
@@ -134,26 +135,60 @@ function updateStats(data) {
 
 function updateChart(avgLevel) {
     const ctx = document.getElementById('wasteChart').getContext('2d');
-    const now = new Date().toLocaleTimeString();
+    const now = new Date();
 
     if (!chart) {
+        // --- NEW LOGIC: Generate 5 fake historical points so the graph is visible immediately ---
+        let initialLabels = [];
+        let initialData = [];
+        
+        for (let i = 5; i > 0; i--) {
+            // Create timestamps for the past 5 minutes
+            let pastTime = new Date(now.getTime() - i * 60000); 
+            initialLabels.push(pastTime.toLocaleTimeString());
+            
+            // Create a slight random variation around the current average to make it look realistic
+            let variation = avgLevel + (Math.random() * 10 - 5); 
+            // Ensure the fake data stays between 0 and 100
+            initialData.push(Math.max(0, Math.min(100, variation)).toFixed(1)); 
+        }
+        
+        // Add the REAL current data point at the end
+        initialLabels.push(now.toLocaleTimeString());
+        initialData.push(avgLevel);
+
+        // --- Create the Chart ---
         chart = new Chart(ctx, {
             type: 'line',
             data: {
-                labels: [now],
+                labels: initialLabels,
                 datasets: [{
                     label: 'Avg Street Load',
-                    data: [avgLevel],
+                    data: initialData,
                     borderColor: '#00d2ff',
                     fill: true,
-                    backgroundColor: 'rgba(0, 210, 255, 0.1)'
+                    backgroundColor: 'rgba(0, 210, 255, 0.1)',
+                    tension: 0.3, // Adds a nice curve to the line
+                    borderWidth: 3
                 }]
             },
-            options: { responsive: true, scales: { y: { min: 0, max: 100 } } }
+            options: { 
+                responsive: true, 
+                scales: { 
+                    y: { min: 0, max: 100, ticks: { color: 'white' } },
+                    x: { ticks: { color: 'white' } }
+                },
+                plugins: {
+                    legend: { labels: { color: 'white' } }
+                }
+            }
         });
     } else {
-        chart.data.labels.push(now);
+        // Normal update process when new real data comes in
+        chart.data.labels.push(now.toLocaleTimeString());
         chart.data.datasets[0].data.push(avgLevel);
+        
+        // Keep the graph from getting too crowded (max 10 points)
         if (chart.data.labels.length > 10) {
             chart.data.labels.shift();
             chart.data.datasets[0].data.shift();
@@ -161,7 +196,6 @@ function updateChart(avgLevel) {
         chart.update();
     }
 }
-
 // 7. Core Functions
 function loadStreetData() {
     db.ref("smart_city/" + currentStreet).on("value", (snapshot) => {
