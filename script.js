@@ -1,13 +1,15 @@
+// 1. Firebase Configuration
 const firebaseConfig = {
-  apiKey: "AIzaSyBowxOjZiwCQdBIsmPigIdKRGjY6ObVtKQ",
-  authDomain: "smart-dustbin-b43d8.firebaseapp.com",
-  databaseURL: "https://smart-dustbin-b43d8-default-rtdb.asia-southeast1.firebasedatabase.app",
-  projectId: "smart-dustbin-b43d8",
+    apiKey: "AIzaSyBowxOjZiwCQdBIsmPigIdKRGjY6ObVtKQ",
+    authDomain: "smart-dustbin-b43d8.firebaseapp.com",
+    databaseURL: "https://smart-dustbin-b43d8-default-rtdb.asia-southeast1.firebasedatabase.app",
+    projectId: "smart-dustbin-b43d8",
 };
 
 firebase.initializeApp(firebaseConfig);
 const db = firebase.database();
 
+// 2. Global Variables
 let currentStreet = "street1";
 let chart;
 let map;
@@ -15,233 +17,165 @@ let routeLine;
 let markers = [];
 let notifiedBins = {};
 
-// Select Street
-function selectStreet(street) {
-    currentStreet = street;
+// Fix for Leaflet Default Icons
+delete L.Icon.Default.prototype._getIconUrl;
+L.Icon.Default.mergeOptions({
+    iconRetinaUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-icon-2x.png',
+    iconUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-icon.png',
+    shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-shadow.png',
+});
 
-    document.getElementById("streetTitle").innerText =
-        street.replace("street", "Street ");
-
-    if (chart) {
-        chart.destroy();
-        chart = null;
-    }
-
-    loadStreetData();
-}
-
-// Initialize Map
+// 3. Initialize Map
 function initMap() {
     map = L.map('map').setView([12.8406, 80.1533], 15);
-
-    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-        attribution: 'OpenStreetMap'
+    L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
+        attribution: '&copy; OpenStreetMap contributors &copy; CARTO'
     }).addTo(map);
 }
 
-// Draw Optimized Route with Markers + Arrows
-function drawOptimizedRoute(streetData) {
-    let streets = [
-        { name: "Bin 1", coord: [12.8406, 80.1533], level: streetData.bin1.level },
-        { name: "Bin 2", coord: [12.8425, 80.1500], level: streetData.bin2.level },
-        { name: "Bin 3", coord: [12.8380, 80.1565], level: streetData.bin3.level },
-        { name: "Bin 4", coord: [12.8365, 80.1520], level: streetData.bin4.level }
-    ];
+// 4. Draw Optimized Route (Logic: Fullest Bins First)
+function drawOptimizedRoute(data) {
+    // Define coordinates (In a real app, these would come from Firebase too)
+    let binCoords = {
+        bin1: [12.8406, 80.1533],
+        bin2: [12.8425, 80.1500],
+        bin3: [12.8380, 80.1565],
+        bin4: [12.8365, 80.1520]
+    };
 
-    // Sort by level (Full bins first)
-    streets.sort((a, b) => b.level - a.level);
-
-    let routeCoords = streets.map(s => s.coord);
-
-    // Remove old route
-    if (routeLine) {
-        map.removeLayer(routeLine);
+    // Create array of objects for sorting
+    let binArray = [];
+    for (let i = 1; i <= 4; i++) {
+        binArray.push({
+            id: `Bin ${i}`,
+            level: data[`bin${i}`].level,
+            coord: binCoords[`bin${i}`]
+        });
     }
 
-    // Remove old markers
+    // SORTING: Priority to bins > 70%, then by level descending
+    binArray.sort((a, b) => b.level - a.level);
+
+    // Clear existing map layers
+    if (routeLine) map.removeLayer(routeLine);
     markers.forEach(m => map.removeLayer(m));
     markers = [];
 
-    // Draw route
-    routeLine = L.polyline(routeCoords, {
-        color: 'red',
-        weight: 6
+    let routePath = binArray.map(b => b.coord);
+
+    // Draw Route with Arrowheads
+    routeLine = L.polyline(routePath, {
+        color: '#00d2ff',
+        weight: 5,
+        opacity: 0.7,
+        dashArray: '10, 10'
     }).addTo(map);
 
-    // Add arrows
     routeLine.arrowheads({
         size: '15px',
-        frequency: '60px'
+        frequency: 'allvertices',
+        fill: true
     });
 
-    // Add markers
-    streets.forEach((s, index) => {
-        let marker = L.marker(s.coord).addTo(map);
-        marker.bindPopup(
-            "Stop " + (index+1) +
-            "<br>" + s.name +
-            "<br>Level: " + s.level + "%"
-        );
+    // Add Markers
+    binArray.forEach((bin, index) => {
+        let marker = L.marker(bin.coord).addTo(map);
+        marker.bindPopup(`<b>Stop ${index + 1}: ${bin.id}</b><br>Level: ${bin.level}%`);
         markers.push(marker);
     });
 
-    map.fitBounds(routeLine.getBounds());
+    map.fitBounds(routeLine.getBounds(), { padding: [50, 50] });
 }
 
-// Bin Fill Animation
-function setBinFill(fillId, level) {
-    let fill = document.getElementById(fillId);
-    fill.style.height = level + "%";
+// 5. Update UI Components
+function updateUI(data) {
+    for (let i = 1; i <= 4; i++) {
+        let binData = data[`bin${i}`];
+        let fill = document.getElementById(`fill${i}`);
+        let levelText = document.getElementById(`level${i}`);
+        let typeText = document.getElementById(`type${i}`);
+        let statusText = document.getElementById(`status${i}`);
 
-    if (level < 30) {
-        fill.style.background = "green";
-        fill.style.animation = "";
-    }
-    else if (level < 70) {
-        fill.style.background = "yellow";
-        fill.style.animation = "";
-    }
-    else {
-        fill.style.background = "red";
-        fill.style.animation = "blink 1s infinite";
-    }
-}
+        // Update Fill Level & Color
+        fill.style.height = binData.level + "%";
+        levelText.innerText = binData.level;
+        typeText.innerText = binData.waste_type;
+        statusText.innerText = binData.level >= 80 ? "FULL" : "Normal";
 
-// Waste Prediction
-function predictWaste(avgLevel) {
-    let growthRate = 5;
-    let predicted = avgLevel + growthRate;
-    if (predicted > 100) predicted = 100;
-
-    document.getElementById("prediction").innerText =
-        predicted.toFixed(1) + "%";
-}
-
-// Full Bin Notification
-function checkFullBins(data) {
-    for (let bin in data) {
-        if (data[bin].level >= 80 && !notifiedBins[bin]) {
-            alert(currentStreet + " " + bin + " is FULL!");
-            notifiedBins[bin] = true;
+        if (binData.level >= 80) {
+            fill.style.background = "#ff4d4d";
+            fill.classList.add("blink-animation");
+        } else if (binData.level >= 50) {
+            fill.style.background = "#ffa502";
+            fill.classList.remove("blink-animation");
+        } else {
+            fill.style.background = "#2ecc71";
+            fill.classList.remove("blink-animation");
         }
     }
 }
 
-// Statistics Dashboard
-function updateStatistics(data) {
-    let levels = [
-        data.bin1.level,
-        data.bin2.level,
-        data.bin3.level,
-        data.bin4.level
-    ];
+// 6. Statistics & Charts
+function updateStats(data) {
+    let levels = [data.bin1.level, data.bin2.level, data.bin3.level, data.bin4.level];
+    let avg = levels.reduce((a, b) => a + b) / 4;
+    
+    document.getElementById("avgLevel").innerText = avg.toFixed(1) + "%";
+    document.getElementById("fullBins").innerText = levels.filter(l => l >= 80).length;
+    document.getElementById("prediction").innerText = (avg + 5 > 100 ? 100 : avg + 5).toFixed(1) + "%";
 
-    let avg = (levels[0] + levels[1] + levels[2] + levels[3]) / 4;
-    document.getElementById("avgLevel").innerText = avg.toFixed(1);
-
-    let full = levels.filter(l => l >= 80).length;
-    document.getElementById("fullBins").innerText = full;
-
-    let dry = 0;
-    let wet = 0;
-
-    for (let bin in data) {
-        if (data[bin].waste_type === "dry") dry++;
-        else wet++;
-    }
-
-    document.getElementById("dryBins").innerText = dry;
-    document.getElementById("wetBins").innerText = wet;
+    updateChart(avg);
 }
 
-// Waste Graph
-function updateChart(level) {
+function updateChart(avgLevel) {
     const ctx = document.getElementById('wasteChart').getContext('2d');
+    const now = new Date().toLocaleTimeString();
 
     if (!chart) {
         chart = new Chart(ctx, {
             type: 'line',
             data: {
-                labels: [new Date().toLocaleTimeString()],
+                labels: [now],
                 datasets: [{
-                    label: 'Waste Level %',
-                    data: [level],
-                    borderColor: '#4cafef',
-                    backgroundColor: 'rgba(76,175,239,0.2)',
-                    borderWidth: 3,
+                    label: 'Avg Street Load',
+                    data: [avgLevel],
+                    borderColor: '#00d2ff',
                     fill: true,
-                    tension: 0.3
+                    backgroundColor: 'rgba(0, 210, 255, 0.1)'
                 }]
             },
-            options: {
-                animation: false,
-                scales: {
-                    x: {
-                        ticks: { color: 'white' },
-                        grid: { color: '#444' }
-                    },
-                    y: {
-                        min: 0,
-                        max: 100,
-                        ticks: { color: 'white' },
-                        grid: { color: '#444' }
-                    }
-                },
-                plugins: {
-                    legend: {
-                        labels: { color: 'white' }
-                    }
-                }
-            }
+            options: { responsive: true, scales: { y: { min: 0, max: 100 } } }
         });
     } else {
-        let time = new Date().toLocaleTimeString();
-        chart.data.labels.push(time);
-        chart.data.datasets[0].data.push(level);
-
+        chart.data.labels.push(now);
+        chart.data.datasets[0].data.push(avgLevel);
         if (chart.data.labels.length > 10) {
             chart.data.labels.shift();
             chart.data.datasets[0].data.shift();
         }
-
         chart.update();
     }
 }
 
-// Load Firebase Data
+// 7. Core Functions
 function loadStreetData() {
-    db.ref("smart_city/" + currentStreet)
-      .on("value", function(snapshot) {
-
+    db.ref("smart_city/" + currentStreet).on("value", (snapshot) => {
         const data = snapshot.val();
-
-        setBinFill("fill1", data.bin1.level);
-        setBinFill("fill2", data.bin2.level);
-        setBinFill("fill3", data.bin3.level);
-        setBinFill("fill4", data.bin4.level);
-
-        document.getElementById("level1").innerText = data.bin1.level;
-        document.getElementById("level2").innerText = data.bin2.level;
-        document.getElementById("level3").innerText = data.bin3.level;
-        document.getElementById("level4").innerText = data.bin4.level;
-
-        let avg = (
-            data.bin1.level +
-            data.bin2.level +
-            data.bin3.level +
-            data.bin4.level
-        ) / 4;
-
-        updateChart(avg);
-        predictWaste(avg);
-        updateStatistics(data);
-        checkFullBins(data);
+        if (!data) return;
+        updateUI(data);
+        updateStats(data);
         drawOptimizedRoute(data);
     });
 }
 
-// Start System
-window.onload = function() {
+function selectStreet(street) {
+    currentStreet = street;
+    document.getElementById("streetTitle").innerText = street.toUpperCase();
+    db.ref("smart_city/").off(); // Stop previous listeners
+    loadStreetData();
+}
+
+window.onload = () => {
     initMap();
     loadStreetData();
 };
