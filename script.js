@@ -6,6 +6,7 @@ const firebaseConfig = {
     projectId: "smart-dustbin-b43d8",
 };
 
+
 firebase.initializeApp(firebaseConfig);
 const db = firebase.database();
 
