@@ -45,24 +45,57 @@ function initMap() {
     drawRoute();
 }
 
+// predictWaste
+function predictWaste(level) {
+    let growthRate = 5; // % per hour (example)
+    let predicted = level + growthRate;
+
+    if (predicted > 100) predicted = 100;
+
+    return predicted;
+}
+
 // Draw Truck Route Near VIT
-function drawRoute() {
-    var street1 = [12.8406, 80.1533];
-    var street2 = [12.8425, 80.1500];
-    var street3 = [12.8380, 80.1565];
-    var street4 = [12.8365, 80.1520];
+// function drawRoute() {
+//     var street1 = [12.8406, 80.1533];
+//     var street2 = [12.8425, 80.1500];
+//     var street3 = [12.8380, 80.1565];
+//     var street4 = [12.8365, 80.1520];
 
-    L.marker(street1).addTo(map).bindPopup("Street 1");
-    L.marker(street2).addTo(map).bindPopup("Street 2");
-    L.marker(street3).addTo(map).bindPopup("Street 3");
-    L.marker(street4).addTo(map).bindPopup("Street 4");
+//     L.marker(street1).addTo(map).bindPopup("Street 1");
+//     L.marker(street2).addTo(map).bindPopup("Street 2");
+//     L.marker(street3).addTo(map).bindPopup("Street 3");
+//     L.marker(street4).addTo(map).bindPopup("Street 4");
 
-    routeLine = L.polyline([street1, street2, street3, street4], {
-        color: 'yellow',
-        weight: 5
+//     routeLine = L.polyline([street1, street2, street3, street4], {
+//         color: 'yellow',
+//         weight: 5
+//     }).addTo(map);
+
+//     map.fitBounds(routeLine.getBounds());
+// }
+
+function drawOptimizedRoute(streetData) {
+    let streets = [
+        { name: "bin1", coord: [12.8406, 80.1533], level: streetData.bin1.level },
+        { name: "bin2", coord: [12.8425, 80.1500], level: streetData.bin2.level },
+        { name: "bin3", coord: [12.8380, 80.1565], level: streetData.bin3.level },
+        { name: "bin4", coord: [12.8365, 80.1520], level: streetData.bin4.level }
+    ];
+
+    // Sort bins by level (descending)
+    streets.sort((a, b) => b.level - a.level);
+
+    let routeCoords = streets.map(s => s.coord);
+
+    if (routeLine) {
+        map.removeLayer(routeLine);
+    }
+
+    routeLine = L.polyline(routeCoords, {
+        color: 'red',
+        weight: 6
     }).addTo(map);
-
-    map.fitBounds(routeLine.getBounds());
 }
 
 // Bin Fill Animation + Color
@@ -114,7 +147,49 @@ function loadStreetData() {
         let avg = (data.bin1.level + data.bin2.level + data.bin3.level + data.bin4.level) / 4;
         updateChart(avg);
         calculateRoute(data);
+        drawOptimizedRoute(data);
+        let predicted = predictWaste(data.bin1.level);
+        document.getElementById("prediction").innerText = predicted + "%";
+        updateStatistics(data);
+        checkFullBins(data);
+        
     });
+}
+
+// Bin Full Notification
+function checkFullBins(data) {
+    for (let bin in data) {
+        if (data[bin].level >= 80) {
+            alert(currentStreet + " " + bin + " is FULL!");
+        }
+    }
+}
+
+// updateStatistics
+function updateStatistics(data) {
+    let levels = [
+        data.bin1.level,
+        data.bin2.level,
+        data.bin3.level,
+        data.bin4.level
+    ];
+
+    let avg = (levels[0] + levels[1] + levels[2] + levels[3]) / 4;
+    document.getElementById("avgLevel").innerText = avg.toFixed(1);
+
+    let full = levels.filter(l => l >= 80).length;
+    document.getElementById("fullBins").innerText = full;
+
+    let dry = 0;
+    let wet = 0;
+
+    for (let bin in data) {
+        if (data[bin].waste_type === "dry") dry++;
+        else wet++;
+    }
+
+    document.getElementById("dryBins").innerText = dry;
+    document.getElementById("wetBins").innerText = wet;
 }
 
 // updateChart (Waste Graph)
