@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,21 +7,17 @@
     <title>Smart Street Waste Monitoring</title>
     
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
     <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
     
     <link rel="stylesheet" href="style.css">
-
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    
 </head>
-    
-    
+
 <body>
 
 <h1>Smart Street Waste Monitoring</h1>
 
-<!-- Street Selection -->
 <div class="streets">
     <button onclick="selectStreet('street1')">Street 1</button>
     <button onclick="selectStreet('street2')">Street 2</button>
@@ -31,7 +27,6 @@
 
 <h2 id="streetTitle">Street 1</h2>
 
-<!-- Bins -->
 <div class="bins-container">
     <div class="bin-card">
         <div class="lid"></div>
@@ -66,27 +61,24 @@
     </div>
 </div>
 
-<!-- Graph -->
 <h2>Daily Waste Graph</h2>
 <div class="graph-container">
     <canvas id="wasteChart"></canvas>
 </div>
 
-<!-- Map -->
 <h2>Garbage Truck Route</h2>
 <div id="map"></div>
 
-<!-- Dashboard Cards -->
 <h2>Statistics Dashboard</h2>
 <div class="dashboard">
 
     <div class="card prediction">
-        <h3>Waste Prediction</h3>
+        <h3><i class="fa-solid fa-chart-line"></i> Prediction</h3>
         <p id="prediction">0%</p>
     </div>
 
     <div class="card avg">
-        <h3>Average Level</h3>
+        <h3><i class="fa-solid fa-percent"></i> Average Level</h3>
         <p id="avgLevel">0%</p>
     </div>
 
@@ -94,22 +86,21 @@
         <h3><i class="fa-solid fa-triangle-exclamation"></i> Full Bins</h3>
         <p id="fullBins">0</p>
     </div>
+
     <div class="card dry">
-        <h3>Dry Waste</h3>
+        <h3><i class="fa-solid fa-recycle"></i> Dry Waste</h3>
         <p id="dryBins">0</p>
     </div>
 
     <div class="card wet">
-        <h3>Wet Waste</h3>
+        <h3><i class="fa-solid fa-leaf"></i> Wet Waste</h3>
         <p id="wetBins">0</p>
     </div>
 
 </div>
 
-    
-<!-- Scripts -->
 <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
-<script src="https://unpkg.com/leaflet-arrowheads@1.0.6/lib/leaflet-arrowheads.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/leaflet-arrowheads@1.4.0/src/leaflet-arrowheads.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
 <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
