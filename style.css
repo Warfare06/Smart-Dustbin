@@ -7,11 +7,11 @@
 }
 
 body {
-    background-color: #0b1120; /* Deepest dark blue/black */
+    background-color: #0f172a;
     background-image: 
-        linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px);
-    background-size: 30px 30px; /* Size of the grid squares */
+        radial-gradient(circle at 10% 10%, rgba(0, 210, 255, 0.15) 0%, transparent 40%),
+        radial-gradient(circle at 90% 90%, rgba(46, 204, 113, 0.1) 0%, transparent 40%);
+    background-attachment: fixed; /* Keeps the glow in place when scrolling */
     color: white;
     font-family: 'Inter', 'Segoe UI', sans-serif;
     margin: 0;
