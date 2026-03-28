@@ -54,20 +54,22 @@ function drawOptimizedRoute(data) {
     // 4. Extract ordered coordinates
     let routePath = binArray.map(b => b.coord);
 
-    // 5. Draw the Route Line AND Arrowheads
+    // 5. Draw the Route Line FIRST and add it to the map
     routeLine = L.polyline(routePath, {
         color: '#00d2ff', 
         weight: 5,
         opacity: 0.8
-        // Removed dashArray as it interferes with arrow rendering
-    }).arrowheads({
+    }).addTo(map);
+
+    // 6. THEN add the arrowheads to the line
+    routeLine.arrowheads({
         size: '20px',             
         frequency: 'allvertices', 
         fill: true,
         color: '#ff4d4d'          
-    }).addTo(map);
+    });
 
-    // 6. Add Map Markers with "Stop Number"
+    // 7. Add Map Markers with "Stop Number"
     binArray.forEach((bin, index) => {
         let marker = L.marker(bin.coord).addTo(map);
         
@@ -81,7 +83,7 @@ function drawOptimizedRoute(data) {
         markers.push(marker);
     });
 
-    // 7. Auto-center the map to fit the whole route
+    // 8. Auto-center the map to fit the whole route
     if (routePath.length > 0) {
         map.fitBounds(routeLine.getBounds(), { padding: [50, 50] });
     }
