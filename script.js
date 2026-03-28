@@ -217,14 +217,52 @@ function updateChart(avgLevel) {
     }
 }
 
+// Check for Full Bins and Trigger Popup Alert
+function checkAlerts(data) {
+    for (let i = 1; i <= 4; i++) {
+        let bin = data[`bin${i}`];
+        if (!bin) continue; // Skip if no data
+
+        // Create a unique name like "street1_bin2" to track it
+        let binKey = currentStreet + "_bin" + i; 
+
+        // Check if level is 80% or higher
+        if (bin.level >= 80) {
+            // Only alert if we haven't already notified the user
+            if (!notifiedBins[binKey]) {
+                
+                // Format the text nicely (e.g., turns "street1" into "Street 1")
+                let formatStreet = currentStreet.replace("street", "Street ");
+                
+                // Trigger the browser popup alert
+                alert(`🚨 URGENT: ${formatStreet}, Bin ${i} is FULL at ${bin.level}%!\nPlease dispatch a truck.`);
+                
+                // Mark as notified so it doesn't spam you
+                notifiedBins[binKey] = true;
+            }
+        } else {
+            // If the bin level drops below 80 (meaning the truck emptied it), 
+            // reset the tracker so it can alert you again next time it fills up!
+            if (notifiedBins[binKey]) {
+                notifiedBins[binKey] = false;
+            }
+        }
+    }
+}
+
+
 // 7. Core Functions
 function loadStreetData() {
     db.ref("smart_city/" + currentStreet).on("value", (snapshot) => {
         const data = snapshot.val();
         if (!data) return;
+        
         updateUI(data);
         updateStats(data);
         drawOptimizedRoute(data);
+        
+        // ADD THIS LINE HERE:
+        checkAlerts(data); 
     });
 }
 
