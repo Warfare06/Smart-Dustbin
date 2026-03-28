@@ -12,6 +12,7 @@ let currentStreet = "street1";
 let chart;
 let map;
 let routeLine;
+let markers = [];
 let notifiedBins = {};
 
 // Select Street
@@ -52,34 +53,37 @@ function drawOptimizedRoute(streetData) {
 
     let routeCoords = streets.map(s => s.coord);
 
+    // Remove old route
     if (routeLine) {
         map.removeLayer(routeLine);
     }
 
-    // Draw route line
+    // Remove old markers
+    markers.forEach(m => map.removeLayer(m));
+    markers = [];
+
+    // Draw route
     routeLine = L.polyline(routeCoords, {
         color: 'red',
         weight: 6
     }).addTo(map);
 
-    // Add arrow direction
+    // Add arrows
     routeLine.arrowheads({
         size: '20px',
-        frequency: '100px'
+        frequency: '50px'
     });
 
-    // Add markers with order numbers
+    // Add markers for bins
     streets.forEach((s, index) => {
         let marker = L.marker(s.coord).addTo(map);
-        marker.bindPopup("Stop " + (index+1) + ": " + s.name + "<br>Level: " + s.level + "%");
+        marker.bindPopup("Stop " + (index+1) + "<br>" + s.name + "<br>Level: " + s.level + "%");
+        markers.push(marker);
     });
 
-    // Truck start marker
-    L.marker(routeCoords[0], {
-        title: "Truck Start"
-    }).addTo(map).bindPopup("Truck Start");
+    // Fit map to route
+    map.fitBounds(routeLine.getBounds());
 }
-
 
 // Bin Fill
 function setBinFill(fillId, level) {
