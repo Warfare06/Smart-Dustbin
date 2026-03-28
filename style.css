@@ -14,13 +14,26 @@ body {
     padding-bottom: 50px;
 }
 
-h1 { padding: 20px; background: rgba(0,0,0,0.3); margin: 0; text-transform: uppercase; letter-spacing: 2px; }
+h1 { 
+    padding: 20px; 
+    background: rgba(0,0,0,0.3); 
+    margin: 0; 
+    text-transform: uppercase; 
+    letter-spacing: 2px; 
+    text-align: center; /* Ensures main header is centered */
+}
 
-/* Navigation */
-.streets { margin: 20px 0; }
+/* Navigation - Centered and Spaced */
+.streets { 
+    display: flex;
+    justify-content: center; 
+    flex-wrap: wrap; 
+    gap: 15px; 
+    margin: 20px auto; 
+}
+
 .streets button {
     padding: 10px 25px;
-    margin: 5px;
     border: 1px solid var(--primary);
     background: transparent;
     color: var(--primary);
@@ -28,7 +41,21 @@ h1 { padding: 20px; background: rgba(0,0,0,0.3); margin: 0; text-transform: uppe
     cursor: pointer;
     transition: 0.3s;
 }
-.streets button:hover { background: var(--primary); color: white; box-shadow: 0 0 15px var(--primary); }
+
+.streets button:hover { 
+    background: var(--primary); 
+    color: white; 
+    box-shadow: 0 0 15px var(--primary); 
+}
+
+/* Street Title - Centered */
+#streetTitle {
+    text-align: center;
+    width: 100%;
+    margin-bottom: 25px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+}
 
 /* Bin Visualization */
 .bins-container {
@@ -66,6 +93,7 @@ h1 { padding: 20px; background: rgba(0,0,0,0.3); margin: 0; text-transform: uppe
 }
 
 .blink-animation { animation: blink-red 1s infinite; }
+
 @keyframes blink-red {
     0% { opacity: 1; }
     50% { opacity: 0.5; }
@@ -79,6 +107,11 @@ h1 { padding: 20px; background: rgba(0,0,0,0.3); margin: 0; text-transform: uppe
     margin: 20px auto;
     border-radius: 15px;
     border: 2px solid var(--primary);
+    z-index: 1;
+}
+
+.leaflet-container {
+    background: #111 !important;
 }
 
 .graph-container {
@@ -102,12 +135,27 @@ h1 { padding: 20px; background: rgba(0,0,0,0.3); margin: 0; text-transform: uppe
     border-radius: 12px;
     text-align: center;
     box-shadow: 0 4px 6px rgba(0,0,0,0.3);
+    transition: transform 0.2s;
 }
 
-.card p { font-size: 1.5rem; margin: 10px 0 0; }
+.card:hover {
+    transform: scale(1.05);
+}
 
-.prediction { background: #6366f1; }
-.avg { background: #10b981; }
-.full { background: #ef4444; }
-.dry { background: #f59e0b; }
-.wet { background: #3b82f6; }
+.card h3 {
+    margin-bottom: 10px;
+    font-size: 1.1rem;
+}
+
+.card p { 
+    font-size: 1.5rem; 
+    margin: 10px 0 0; 
+    font-weight: bold;
+}
+
+/* Dashboard Card Colors */
+.prediction { background: linear-gradient(135deg, #6366f1, #a5b4fc); }
+.avg { background: linear-gradient(135deg, #10b981, #6ee7b7); }
+.full { background: linear-gradient(135deg, #ef4444, #fca5a5); }
+.dry { background: linear-gradient(135deg, #f59e0b, #fde68a); color: black; }
+.wet { background: linear-gradient(135deg, #3b82f6, #93c5fd); }
