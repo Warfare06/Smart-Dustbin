@@ -21,8 +21,16 @@ let routeLine;
 // Select Street
 function selectStreet(street) {
     currentStreet = street;
+
     document.getElementById("streetTitle").innerText =
         street.replace("street", "Street ");
+
+    // Reset Graph
+    if (chart) {
+        chart.destroy();
+        chart = null;
+    }
+
     loadStreetData();
 }
 
@@ -103,12 +111,13 @@ function loadStreetData() {
         document.getElementById("status4").innerText = data.bin4.status;
         setBinFill("fill4", data.bin4.level);
 
-        updateChart(data.bin1.level);
+        let avg = (data.bin1.level + data.bin2.level + data.bin3.level + data.bin4.level) / 4;
+        updateChart(avg);
         calculateRoute(data);
     });
 }
 
-// Waste Graph
+// updateChart (Waste Graph)
 function updateChart(level) {
     const ctx = document.getElementById('wasteChart').getContext('2d');
 
@@ -128,6 +137,7 @@ function updateChart(level) {
                 }]
             },
             options: {
+                animation: false,
                 scales: {
                     x: {
                         ticks: { color: 'white' },
@@ -148,6 +158,7 @@ function updateChart(level) {
     }
 
     let time = new Date().toLocaleTimeString();
+
     chart.data.labels.push(time);
     chart.data.datasets[0].data.push(level);
     chart.update();
