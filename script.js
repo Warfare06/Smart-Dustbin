@@ -39,10 +39,10 @@ function drawOptimizedRoute(data) {
     // 1. Structure your JSON data into an array
     // Assuming your JSON has coordinates, or you can hardcode them here
     let binArray = [
-        { id: "Bin 1", level: data.bin1.level, coord: [12.8406, 80.1533] },
-        { id: "Bin 2", level: data.bin2.level, coord: [12.8425, 80.1500] },
-        { id: "Bin 3", level: data.bin3.level, coord: [12.8380, 80.1565] },
-        { id: "Bin 4", level: data.bin4.level, coord: [12.8365, 80.1520] }
+        { id: "Bin 1", level: data.bin1 ? data.bin1.level : 0, coord: [12.8406, 80.1533] },
+        { id: "Bin 2", level: data.bin2 ? data.bin2.level : 0, coord: [12.8425, 80.1500] },
+        { id: "Bin 3", level: data.bin3 ? data.bin3.level : 0, coord: [12.8380, 80.1565] },
+        { id: "Bin 4", level: data.bin4 ? data.bin4.level : 0, coord: [12.8365, 80.1520] }
     ];
 
     // 2. THE MAGIC: Sort bins from Highest (Fullest) to Lowest
@@ -174,9 +174,14 @@ function loadStreetData() {
 }
 
 function selectStreet(street) {
+    // 1. Turn off the listener for the OLD street first!
+    db.ref("smart_city/" + currentStreet).off(); 
+
+    // 2. Now update to the new street
     currentStreet = street;
     document.getElementById("streetTitle").innerText = street.toUpperCase();
-    db.ref("smart_city/").off(); // Stop previous listeners
+    
+    // 3. Load the data for the new street
     loadStreetData();
 }
 
