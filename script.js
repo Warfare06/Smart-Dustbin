@@ -122,7 +122,7 @@ function updateStatistics(data) {
     document.getElementById("wetBins").innerText = wet;
 }
 
-// Waste Graph
+// updateChart Waste Graph
 function updateChart(level) {
     const ctx = document.getElementById('wasteChart').getContext('2d');
 
@@ -130,10 +130,10 @@ function updateChart(level) {
         chart = new Chart(ctx, {
             type: 'line',
             data: {
-                labels: [],
+                labels: [new Date().toLocaleTimeString()],
                 datasets: [{
                     label: 'Waste Level %',
-                    data: [],
+                    data: [level],
                     borderColor: '#00ffcc',
                     backgroundColor: 'rgba(0,255,204,0.2)',
                     borderWidth: 3,
@@ -144,21 +144,36 @@ function updateChart(level) {
             options: {
                 animation: false,
                 scales: {
-                    x: { ticks: { color: 'white' }, grid: { color: '#444' } },
-                    y: { ticks: { color: 'white' }, grid: { color: '#444' } }
+                    x: {
+                        ticks: { color: 'white' },
+                        grid: { color: '#444' }
+                    },
+                    y: {
+                        min: 0,
+                        max: 100,
+                        ticks: { color: 'white' },
+                        grid: { color: '#444' }
+                    }
                 },
                 plugins: {
-                    legend: { labels: { color: 'white' } }
+                    legend: {
+                        labels: { color: 'white' }
+                    }
                 }
             }
         });
+    } else {
+        let time = new Date().toLocaleTimeString();
+        chart.data.labels.push(time);
+        chart.data.datasets[0].data.push(level);
+        if (chart.data.labels.length > 10) {
+          chart.data.labels.shift();
+          chart.data.datasets[0].data.shift();
+        }
+      chart.update();
     }
-
-    let time = new Date().toLocaleTimeString();
-    chart.data.labels.push(time);
-    chart.data.datasets[0].data.push(level);
-    chart.update();
 }
+
 
 // Load Firebase Data
 function loadStreetData() {
