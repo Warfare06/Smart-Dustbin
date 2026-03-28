@@ -62,15 +62,33 @@
 <h2>Garbage Truck Route</h2>
 <div id="map" style="width:90%; height:400px; margin:auto;"></div>
 
-<h2>Waste Prediction</h2>
-<p>Predicted Bin Level: <span id="prediction">0</span></p>
+<div class="dashboard">
 
-<h2>Statistics Dashboard</h2>
-<div class="stats">
-    <p>Average Street Level: <span id="avgLevel">0</span>%</p>
-    <p>Full Bins: <span id="fullBins">0</span></p>
-    <p>Dry Waste Bins: <span id="dryBins">0</span></p>
-    <p>Wet Waste Bins: <span id="wetBins">0</span></p>
+    <div class="card prediction">
+        <h3>Waste Prediction</h3>
+        <p id="prediction">0%</p>
+    </div>
+
+    <div class="card avg">
+        <h3>Average Level</h3>
+        <p id="avgLevel">0%</p>
+    </div>
+
+    <div class="card full">
+        <h3>Full Bins</h3>
+        <p id="fullBins">0</p>
+    </div>
+
+    <div class="card dry">
+        <h3>Dry Waste</h3>
+        <p id="dryBins">0</p>
+    </div>
+
+    <div class="card wet">
+        <h3>Wet Waste</h3>
+        <p id="wetBins">0</p>
+    </div>
+
 </div>
 
 <!-- Leaflet Map JS -->
