@@ -6,7 +6,7 @@
     --card-bg: rgba(30, 41, 59, 0.7);
 }
 
-body {
+/* body {
     background: linear-gradient(-45deg, #0f172a, #1e293b, #020617, #172554);
     background-size: 400% 400%;
     animation: gradientFlow 15s ease infinite;
@@ -14,34 +14,34 @@ body {
     font-family: 'Inter', 'Segoe UI', sans-serif;
     margin: 0;
     padding-bottom: 50px;
-}
+} */
 
 /* This makes the gradient move */
-@keyframes gradientFlow {
+/* @keyframes gradientFlow {
     0% { background-position: 0% 50%; }
     50% { background-position: 100% 50%; }
     100% { background-position: 0% 50%; }
-}
+} */
 
-h1 { 
+/* h1 { 
     padding: 20px; 
     background: rgba(0,0,0,0.3); 
     margin: 0; 
     text-transform: uppercase; 
     letter-spacing: 2px; 
-    text-align: center; /* Ensures main header is centered */
-}
+    text-align: center; 
+} */
 /* Section Titles (Graph, Map, Dashboard) */
-h2 {
+/* h2 {
     text-align: center;
     width: 100%;
-    margin-top: 40px; /* Adds breathing room above the title */
-    margin-bottom: 20px; /* Adds space between the title and the content */
+    margin-top: 40px; 
+    margin-bottom: 20px; 
     letter-spacing: 1.5px;
-}
+} */
 
 /* Navigation - Centered and Spaced */
-.streets { 
+/* .streets { 
     display: flex;
     justify-content: center; 
     flex-wrap: wrap; 
@@ -63,6 +63,136 @@ h2 {
     background: var(--primary); 
     color: white; 
     box-shadow: 0 0 15px var(--primary); 
+} */
+
+
+/* =========================================
+   1. ANIMATED OLED BLACK BACKGROUND
+   ========================================= */
+body {
+    margin: 0;
+    font-family: 'Inter', sans-serif;
+    /* This creates a super dark, slowly moving gradient background */
+    background: linear-gradient(-45deg, #000000, #0a0a0a, #111111, #050505);
+    background-size: 400% 400%;
+    animation: darkGradientMove 15s ease infinite;
+    color: #ffffff;
+    overflow-x: hidden; /* Prevents horizontal scrolling */
+}
+
+/* The math for the moving background */
+@keyframes darkGradientMove {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+}
+
+/* =========================================
+   2. GRADIENT TEXT TITLE
+   ========================================= */
+h1 {
+    text-align: center;
+    margin-top: 30px;
+    font-size: 2.5rem;
+    /* Metallic/Neon Blue Text Gradient */
+    background: linear-gradient(to right, #00d2ff, #3a7bd5);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    /* Animation so the title drops in smoothly */
+    animation: fadeInDown 1s ease forwards;
+}
+
+h2 {
+    text-align: center;
+    color: #e2e8f0;
+    letter-spacing: 2px;
+}
+
+/* =========================================
+   3. ANIMATED GLOWING BUTTONS
+   ========================================= */
+.streets {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    margin-bottom: 30px;
+    animation: fadeInDown 1.2s ease forwards;
+}
+
+.streets button {
+    background: rgba(255, 255, 255, 0.05); /* Glassmorphism look */
+    border: 1px solid rgba(0, 210, 255, 0.3);
+    color: white;
+    padding: 12px 25px;
+    font-size: 1rem;
+    font-weight: bold;
+    border-radius: 8px;
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+    z-index: 1;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+/* The Light-Sweep Hover Effect */
+.streets button::before {
+    content: '';
+    position: absolute;
+    top: 0; 
+    left: -100%;
+    width: 100%; 
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(0, 210, 255, 0.4), transparent);
+    transition: left 0.5s ease;
+    z-index: -1;
+}
+
+.streets button:hover::before {
+    left: 100%; /* Sweeps the light across the button */
+}
+
+.streets button:hover {
+    transform: scale(1.05); /* Button grows slightly */
+    box-shadow: 0 0 20px rgba(0, 210, 255, 0.6); /* Glows blue */
+}
+
+/* =========================================
+   4. SMOOTH LOAD-IN ANIMATIONS FOR EVERYTHING
+   ========================================= */
+/* We set opacity to 0 first, then the animation fades them in */
+.bins-container {
+    animation: fadeInUp 1s ease forwards;
+    opacity: 0;
+    animation-delay: 0.2s; /* Waits a split second before appearing */
+}
+
+.graph-container {
+    animation: fadeInUp 1s ease forwards;
+    opacity: 0;
+    animation-delay: 0.4s;
+}
+
+#map {
+    animation: fadeInUp 1s ease forwards;
+    opacity: 0;
+    animation-delay: 0.6s;
+}
+
+.dashboard, .forecast-container {
+    animation: fadeInUp 1s ease forwards;
+    opacity: 0;
+    animation-delay: 0.8s;
+}
+
+/* The actual math for the Fade Up and Fade Down animations */
+@keyframes fadeInUp {
+    from { transform: translateY(30px); opacity: 0; }
+    to { transform: translateY(0); opacity: 1; }
+}
+
+@keyframes fadeInDown {
+    from { transform: translateY(-30px); opacity: 0; }
+    to { transform: translateY(0); opacity: 1; }
 }
 
 /* Street Title - Centered */
