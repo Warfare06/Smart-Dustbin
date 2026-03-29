@@ -159,6 +159,64 @@ function updateStats(data) {
     updateChart(avg);
 }
 
+// function updateChart(avgLevel) {
+//     const ctx = document.getElementById('wasteChart').getContext('2d');
+//     const now = new Date();
+
+//     if (!chart) {
+//         // Generate historical fake points on initial load
+//         let initialLabels = [];
+//         let initialData = [];
+        
+//         for (let i = 5; i > 0; i--) {
+//             let pastTime = new Date(now.getTime() - i * 60000); 
+//             initialLabels.push(pastTime.toLocaleTimeString());
+//             let variation = avgLevel + (Math.random() * 10 - 5); 
+//             initialData.push(Math.max(0, Math.min(100, variation)).toFixed(1)); 
+//         }
+        
+//         // Add real current point
+//         initialLabels.push(now.toLocaleTimeString());
+//         initialData.push(avgLevel);
+
+//         chart = new Chart(ctx, {
+//             type: 'line',
+//             data: {
+//                 labels: initialLabels,
+//                 datasets: [{
+//                     label: 'Avg Street Load',
+//                     data: initialData,
+//                     borderColor: '#00d2ff',
+//                     fill: true,
+//                     backgroundColor: 'rgba(0, 210, 255, 0.1)',
+//                     tension: 0.3, 
+//                     borderWidth: 3
+//                 }]
+//             },
+//             options: { 
+//                 responsive: true, 
+//                 scales: { 
+//                     y: { min: 0, max: 100, ticks: { color: 'white' } },
+//                     x: { ticks: { color: 'white' } }
+//                 },
+//                 plugins: {
+//                     legend: { labels: { color: 'white' } }
+//                 }
+//             }
+//         });
+//     } else {
+//         // Update with live data
+//         chart.data.labels.push(now.toLocaleTimeString());
+//         chart.data.datasets[0].data.push(avgLevel);
+        
+//         if (chart.data.labels.length > 10) {
+//             chart.data.labels.shift();
+//             chart.data.datasets[0].data.shift();
+//         }
+//         chart.update();
+//     }
+// }
+
 function updateChart(avgLevel) {
     const ctx = document.getElementById('wasteChart').getContext('2d');
     const now = new Date();
@@ -179,28 +237,47 @@ function updateChart(avgLevel) {
         initialLabels.push(now.toLocaleTimeString());
         initialData.push(avgLevel);
 
+        // --- NEW: Create a beautiful fading gradient for the graph fill ---
+        let gradient = ctx.createLinearGradient(0, 0, 0, 400);
+        gradient.addColorStop(0, 'rgba(0, 210, 255, 0.6)'); // Bright blue at the top
+        gradient.addColorStop(1, 'rgba(0, 210, 255, 0.0)'); // Fades to transparent at the bottom
+
         chart = new Chart(ctx, {
             type: 'line',
             data: {
                 labels: initialLabels,
                 datasets: [{
-                    label: 'Avg Street Load',
+                    label: 'Avg Street Load (%)',
                     data: initialData,
-                    borderColor: '#00d2ff',
+                    borderColor: '#00d2ff', // Neon blue line
+                    backgroundColor: gradient, // Uses the fading gradient
                     fill: true,
-                    backgroundColor: 'rgba(0, 210, 255, 0.1)',
-                    tension: 0.3, 
-                    borderWidth: 3
+                    tension: 0.4, // Smoother flowing curves
+                    borderWidth: 4, // Thicker, bolder line
+                    pointBackgroundColor: '#ffffff', // Bright white dots
+                    pointBorderColor: '#00d2ff', // Blue ring around the white dots
+                    pointBorderWidth: 2,
+                    pointRadius: 5, // Larger dots
+                    pointHoverRadius: 8 // Dots get even bigger when hovered
                 }]
             },
             options: { 
                 responsive: true, 
+                maintainAspectRatio: false, // Allows us to control the height perfectly
                 scales: { 
-                    y: { min: 0, max: 100, ticks: { color: 'white' } },
-                    x: { ticks: { color: 'white' } }
+                    y: { 
+                        min: 0, 
+                        max: 100, 
+                        ticks: { color: '#ffffff', font: { size: 14, weight: 'bold' } }, // Bigger, brighter Y-axis text
+                        grid: { color: 'rgba(255, 255, 255, 0.1)' } // Faint horizontal gridlines
+                    },
+                    x: { 
+                        ticks: { color: '#e2e8f0', font: { size: 12 } }, // Brighter X-axis time text
+                        grid: { color: 'rgba(255, 255, 255, 0.1)' } // Faint vertical gridlines
+                    }
                 },
                 plugins: {
-                    legend: { labels: { color: 'white' } }
+                    legend: { labels: { color: '#ffffff', font: { size: 16, weight: 'bold' } } } // Bigger Title
                 }
             }
         });
