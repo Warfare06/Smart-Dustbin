@@ -34,7 +34,6 @@ function initMap() {
 }
 
 // 4. Draw Optimized Route (Logic: Fullest Bins First)
-// 4. Draw Optimized Route (Logic: Fullest Bins First)
 function drawOptimizedRoute(data) {
     // 0. Safety Check: Make sure we actually have data!
     if (!data) {
@@ -140,24 +139,44 @@ function updateUI(data) {
 
 // 6. Statistics & Charts
 function updateStats(data) {
-    // Only calculate using bins that actually exist in the data
     let levels = [];
-    if(data.bin1) levels.push(data.bin1.level);
-    if(data.bin2) levels.push(data.bin2.level);
-    if(data.bin3) levels.push(data.bin3.level);
-    if(data.bin4) levels.push(data.bin4.level);
+    let dryCount = 0;
+    let wetCount = 0;
+
+    // Loop through the 4 bins to gather their levels and count their types safely
+    for (let i = 1; i <= 4; i++) {
+        let bin = data[`bin${i}`];
+        if (bin) {
+            levels.push(bin.level);
+            
+            // Check the waste type (converting to lowercase just to be safe)
+            if (bin.waste_type && bin.waste_type.toLowerCase() === "dry") {
+                dryCount++;
+            } else if (bin.waste_type && bin.waste_type.toLowerCase() === "wet") {
+                wetCount++;
+            }
+        }
+    }
     
     // Prevent math errors if data is temporarily empty
     if(levels.length === 0) return;
 
     let avg = levels.reduce((a, b) => a + b) / levels.length;
     
+    // Update the Dashboard Cards
     document.getElementById("avgLevel").innerText = avg.toFixed(1) + "%";
     document.getElementById("fullBins").innerText = levels.filter(l => l >= 80).length;
     document.getElementById("prediction").innerText = (avg + 5 > 100 ? 100 : avg + 5).toFixed(1) + "%";
+    
+    // --- NEW: Update the Dry and Wet Waste counters ---
+    document.getElementById("dryBins").innerText = dryCount;
+    document.getElementById("wetBins").innerText = wetCount;
 
     updateChart(avg);
-    runAIPrediction(avg);
+    
+    // If you added the AI prediction from earlier, keep this line. 
+    // If you haven't added it yet, you can delete this line!
+    if (typeof runAIPrediction === "function") runAIPrediction(avg); 
 }
 
 function updateChart(avgLevel) {
