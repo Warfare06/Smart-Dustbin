@@ -199,10 +199,10 @@ function updateChart(avgLevel) {
         initialLabels.push(now.toLocaleTimeString());
         initialData.push(avgLevel);
 
-        // --- NEW: Create a beautiful fading gradient for the graph fill ---
+        // --- NEW: Red Fading Gradient ---
         let gradient = ctx.createLinearGradient(0, 0, 0, 400);
-        gradient.addColorStop(0, 'rgba(0, 210, 255, 0.6)'); // Bright blue at the top
-        gradient.addColorStop(1, 'rgba(0, 210, 255, 0.0)'); // Fades to transparent at the bottom
+        gradient.addColorStop(0, 'rgba(255, 0, 0, 0.6)'); // Bright red at the top
+        gradient.addColorStop(1, 'rgba(255, 0, 0, 0.0)'); // Fades to transparent
 
         chart = new Chart(ctx, {
             type: 'line',
@@ -211,16 +211,16 @@ function updateChart(avgLevel) {
                 datasets: [{
                     label: 'Avg Street Load (%)',
                     data: initialData,
-                    borderColor: '#00d2ff', // Neon blue line
-                    backgroundColor: gradient, // Uses the fading gradient
+                    borderColor: '#ff0000', // Neon Red line
+                    backgroundColor: gradient, 
                     fill: true,
-                    tension: 0.4, // Smoother flowing curves
-                    borderWidth: 4, // Thicker, bolder line
-                    pointBackgroundColor: '#ffffff', // Bright white dots
-                    pointBorderColor: '#00d2ff', // Blue ring around the white dots
+                    tension: 0.4, 
+                    borderWidth: 4, 
+                    pointBackgroundColor: '#ffffff', 
+                    pointBorderColor: '#ff0000', // Red ring around dots
                     pointBorderWidth: 2,
-                    pointRadius: 5, // Larger dots
-                    pointHoverRadius: 8 // Dots get even bigger when hovered
+                    pointRadius: 5, 
+                    pointHoverRadius: 8 
                 }]
             },
             options: { 
