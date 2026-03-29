@@ -6,78 +6,57 @@
     --card-bg: rgba(30, 41, 59, 0.7);
 }
 
-/* body {
-    background: linear-gradient(-45deg, #0f172a, #1e293b, #020617, #172554);
-    background-size: 400% 400%;
-    animation: gradientFlow 15s ease infinite;
-    color: white;
-    font-family: 'Inter', 'Segoe UI', sans-serif;
-    margin: 0;
-    padding-bottom: 50px;
-} */
-
-/* This makes the gradient move */
-/* @keyframes gradientFlow {
-    0% { background-position: 0% 50%; }
-    50% { background-position: 100% 50%; }
-    100% { background-position: 0% 50%; }
-} */
-
-/* h1 { 
-    padding: 20px; 
-    background: rgba(0,0,0,0.3); 
-    margin: 0; 
-    text-transform: uppercase; 
-    letter-spacing: 2px; 
-    text-align: center; 
-} */
-/* Section Titles (Graph, Map, Dashboard) */
-/* h2 {
-    text-align: center;
-    width: 100%;
-    margin-top: 40px; 
-    margin-bottom: 20px; 
-    letter-spacing: 1.5px;
-} */
-
-/* Navigation - Centered and Spaced */
-/* .streets { 
-    display: flex;
-    justify-content: center; 
-    flex-wrap: wrap; 
-    gap: 15px; 
-    margin: 20px auto; 
-}
-
-.streets button {
-    padding: 10px 25px;
-    border: 1px solid var(--primary);
-    background: transparent;
-    color: var(--primary);
-    border-radius: 5px;
-    cursor: pointer;
-    transition: 0.3s;
-}
-
-.streets button:hover { 
-    background: var(--primary); 
-    color: white; 
-    box-shadow: 0 0 15px var(--primary); 
-} */
-
-
-/* =========================================
-   1. ANIMATED OLED BLACK BACKGROUND
-   ========================================= */
+/* 
+   1. FLOATING NEON ORBS BACKGROUND
+   =========================================  */
 body {
     margin: 0;
     font-family: 'Inter', sans-serif;
-    /* This creates a super dark, slowly moving gradient background */
-    background: linear-gradient(-45deg, #000000, #0a0a0a, #111111, #050505);
-    background-size: 400% 400%;
-    animation: darkGradientMove 15s ease infinite;
     color: #ffffff;
-    overflow-x: hidden; /* Prevents horizontal scrolling */
+    background-color: #030712; /* A very deep, rich midnight blue/black base */
+    min-height: 100vh;
+    overflow-x: hidden;
+    position: relative; /* Crucial for the glowing orbs */
+    z-index: 0;
+}
+
+/* Glowing Blue Light in the top left */
+body::before {
+    content: '';
+    position: fixed; /* Stays in the background even if you scroll */
+    top: -150px;
+    left: -150px;
+    width: 700px;
+    height: 700px;
+    background: radial-gradient(circle, rgba(0, 210, 255, 0.15), transparent 60%);
+    border-radius: 50%;
+    animation: driftBlue 15s infinite alternate ease-in-out;
+    z-index: -1; /* Hides it behind your dashboard cards */
+}
+
+/* Glowing Purple Light in the bottom right */
+body::after {
+    content: '';
+    position: fixed; 
+    bottom: -150px;
+    right: -150px;
+    width: 800px;
+    height: 800px;
+    background: radial-gradient(circle, rgba(99, 102, 241, 0.15), transparent 60%);
+    border-radius: 50%;
+    animation: driftPurple 20s infinite alternate ease-in-out;
+    z-index: -1;
+}
+
+/* The animation math that makes them slowly float around */
+@keyframes driftBlue {
+    0% { transform: translate(0px, 0px) scale(1); }
+    100% { transform: translate(30vw, 20vh) scale(1.3); }
+}
+
+@keyframes driftPurple {
+    0% { transform: translate(0px, 0px) scale(1); }
+    100% { transform: translate(-30vw, -20vh) scale(1.2); }
 }
 
 /* The math for the moving background */
