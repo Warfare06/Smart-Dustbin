@@ -225,13 +225,13 @@ function updateChart(avgLevel) {
             },
             options: { 
                 responsive: true, 
-                maintainAspectRatio: false, // Allows us to control the height perfectly
+                maintainAspectRatio: false, 
                 scales: { 
                     y: { 
                         min: 0, 
                         max: 100, 
-                        ticks: { color: '#ffffff', font: { size: 14, weight: 'bold' } }, // Bigger, brighter Y-axis text
-                        grid: { color: 'rgba(255, 255, 255, 0.1)' } // Faint horizontal gridlines
+                        ticks: { color: '#ffffff', font: { size: 14, weight: 'bold' } }, 
+                        grid: { color: 'rgba(255, 255, 255, 0.1)' } 
                     },
                     x: { 
                         ticks: { color: '#e2e8f0', font: { size: 12 } }, // Brighter X-axis time text
