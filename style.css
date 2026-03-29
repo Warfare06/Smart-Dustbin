@@ -237,6 +237,7 @@ h2 {
     margin: 10px 0 0; 
     font-weight: bold;
 }
+
 /* =========================================
    VIBRANT NEON DASHBOARD CARDS
    ========================================= */
@@ -258,7 +259,7 @@ h2 {
 .dry { 
     background: linear-gradient(135deg, #f59e0b, #fde68a); 
     box-shadow: 0 0 15px rgba(245, 158, 11, 0.4); 
-    color: black; /* Black text is easier to read on yellow */
+    color: black; 
 }
 .wet { 
     background: linear-gradient(135deg, #3b82f6, #93c5fd); 
@@ -272,7 +273,6 @@ h2 {
 .full:hover { box-shadow: 0 0 25px rgba(239, 68, 68, 0.9); }
 .dry:hover { box-shadow: 0 0 25px rgba(245, 158, 11, 0.9); }
 .wet:hover { box-shadow: 0 0 25px rgba(59, 130, 246, 0.9); }
-}
 
 /* =========================================
    7. MAP & GRAPH CHARTS
@@ -290,11 +290,11 @@ h2 {
     animation: fadeInUp 1s ease forwards;
     opacity: 0;
     animation-delay: 0.4s;
+}
 
-    #wasteChart {
+#wasteChart {
     width: 100% !important;
     height: 100% !important;
-    }
 }
 
 #map {
@@ -302,7 +302,7 @@ h2 {
     width: 90%;
     margin: 20px auto 40px auto;
     border-radius: 15px;
-    border: 2px solid var(--primary); /* Now glows pure red */
+    border: 2px solid var(--primary); 
     z-index: 1;
     animation: fadeInUp 1s ease forwards;
     opacity: 0;
