@@ -157,65 +157,8 @@ function updateStats(data) {
     document.getElementById("prediction").innerText = (avg + 5 > 100 ? 100 : avg + 5).toFixed(1) + "%";
 
     updateChart(avg);
+    runAIPrediction(avg);
 }
-
-// function updateChart(avgLevel) {
-//     const ctx = document.getElementById('wasteChart').getContext('2d');
-//     const now = new Date();
-
-//     if (!chart) {
-//         // Generate historical fake points on initial load
-//         let initialLabels = [];
-//         let initialData = [];
-        
-//         for (let i = 5; i > 0; i--) {
-//             let pastTime = new Date(now.getTime() - i * 60000); 
-//             initialLabels.push(pastTime.toLocaleTimeString());
-//             let variation = avgLevel + (Math.random() * 10 - 5); 
-//             initialData.push(Math.max(0, Math.min(100, variation)).toFixed(1)); 
-//         }
-        
-//         // Add real current point
-//         initialLabels.push(now.toLocaleTimeString());
-//         initialData.push(avgLevel);
-
-//         chart = new Chart(ctx, {
-//             type: 'line',
-//             data: {
-//                 labels: initialLabels,
-//                 datasets: [{
-//                     label: 'Avg Street Load',
-//                     data: initialData,
-//                     borderColor: '#00d2ff',
-//                     fill: true,
-//                     backgroundColor: 'rgba(0, 210, 255, 0.1)',
-//                     tension: 0.3, 
-//                     borderWidth: 3
-//                 }]
-//             },
-//             options: { 
-//                 responsive: true, 
-//                 scales: { 
-//                     y: { min: 0, max: 100, ticks: { color: 'white' } },
-//                     x: { ticks: { color: 'white' } }
-//                 },
-//                 plugins: {
-//                     legend: { labels: { color: 'white' } }
-//                 }
-//             }
-//         });
-//     } else {
-//         // Update with live data
-//         chart.data.labels.push(now.toLocaleTimeString());
-//         chart.data.datasets[0].data.push(avgLevel);
-        
-//         if (chart.data.labels.length > 10) {
-//             chart.data.labels.shift();
-//             chart.data.datasets[0].data.shift();
-//         }
-//         chart.update();
-//     }
-// }
 
 function updateChart(avgLevel) {
     const ctx = document.getElementById('wasteChart').getContext('2d');
@@ -324,6 +267,60 @@ function checkAlerts(data) {
                 notifiedBins[binKey] = false;
             }
         }
+    }
+}
+
+// AI Predictive Algorithm (Simulated ML)
+function runAIPrediction(currentAvg) {
+    const forecastDiv = document.getElementById("aiForecast");
+    forecastDiv.innerHTML = ""; // Clear old predictions
+
+    const days = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+    const today = new Date().getDay(); // Gets current day as a number (0-6)
+
+    // "Trained Weights" - The algorithm assumes weekends generate way more trash 
+    // than mid-week days. You can adjust these multipliers!
+    const dayWeights = { 
+        0: 1.5, // Sunday (High trash)
+        1: 0.8, // Monday (Low)
+        2: 0.9, // Tuesday
+        3: 0.9, // Wednesday
+        4: 1.1, // Thursday
+        5: 1.3, // Friday (Rising)
+        6: 1.6  // Saturday (Highest trash)
+    };
+
+    // Generate the next 7 days
+    for (let i = 1; i <= 7; i++) {
+        let targetDayIndex = (today + i) % 7;
+        let dayName = days[targetDayIndex];
+
+        // The Math: Base average * the day's weight + a tiny bit of random noise for realism
+        let basePrediction = currentAvg * dayWeights[targetDayIndex];
+        let randomNoise = (Math.random() * 8) - 4; // +/- 4% variation
+        
+        // Ensure it stays between 0% and 100%
+        let finalPrediction = Math.min(100, Math.max(0, basePrediction + randomNoise)).toFixed(1);
+
+        // Determine color/status based on the AI's prediction
+        let statusClass = "status-low";
+        let statusText = "NORMAL";
+        if (finalPrediction >= 80) { 
+            statusClass = "status-high"; 
+            statusText = "CRITICAL"; 
+        } else if (finalPrediction >= 50) { 
+            statusClass = "status-med"; 
+            statusText = "ELEVATED"; 
+        }
+
+        // Inject the card into the HTML
+        forecastDiv.innerHTML += `
+            <div class="forecast-card">
+                <div class="forecast-day">${dayName}</div>
+                <div class="forecast-value">${finalPrediction}%</div>
+                <div class="forecast-status ${statusClass}">${statusText}</div>
+            </div>
+        `;
     }
 }
 
