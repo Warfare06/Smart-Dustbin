@@ -278,9 +278,10 @@ h2 {
    7. MAP & GRAPH CHARTS
    ========================================= */
 .graph-container {
+    position: relative; 
     width: 80%;
-    height: 400px; 
-    margin: 0 auto 40px auto; /* Perfect Centering */
+    min-height: 400px; 
+    margin: 0 auto 40px auto; 
     display: block;
     background: var(--card-bg);
     padding: 20px;
