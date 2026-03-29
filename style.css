@@ -140,10 +140,12 @@ h2 {
 
 .graph-container {
     width: 80%;
+    height: 400px; 
     margin: auto;
     background: var(--card-bg);
     padding: 20px;
     border-radius: 15px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.5); 
 }
 
 /* Dashboard */
