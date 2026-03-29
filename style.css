@@ -237,16 +237,41 @@ h2 {
     margin: 10px 0 0; 
     font-weight: bold;
 }
+/* =========================================
+   VIBRANT NEON DASHBOARD CARDS
+   ========================================= */
+.prediction { 
+    background: linear-gradient(135deg, #6366f1, #a5b4fc); 
+    box-shadow: 0 0 15px rgba(99, 102, 241, 0.4); 
+    color: white; 
+}
+.avg { 
+    background: linear-gradient(135deg, #10b981, #6ee7b7); 
+    box-shadow: 0 0 15px rgba(16, 185, 129, 0.4); 
+    color: white; 
+}
+.full { 
+    background: linear-gradient(135deg, #ef4444, #fca5a5); 
+    box-shadow: 0 0 15px rgba(239, 68, 68, 0.4); 
+    color: white; 
+}
+.dry { 
+    background: linear-gradient(135deg, #f59e0b, #fde68a); 
+    box-shadow: 0 0 15px rgba(245, 158, 11, 0.4); 
+    color: black; /* Black text is easier to read on yellow */
+}
+.wet { 
+    background: linear-gradient(135deg, #3b82f6, #93c5fd); 
+    box-shadow: 0 0 15px rgba(59, 130, 246, 0.4); 
+    color: white; 
+}
 
-/* Dark Theme Dashboard Colors with Red Accents */
-.prediction { background: linear-gradient(135deg, #1a0000, #330000); box-shadow: 0 0 15px rgba(255, 0, 0, 0.3); }
-.avg { background: linear-gradient(135deg, #0d0000, #260000); box-shadow: 0 0 15px rgba(255, 0, 0, 0.3); }
-.full { background: linear-gradient(135deg, #4d0000, #800000); box-shadow: 0 0 15px rgba(255, 0, 0, 0.6); }
-.dry { background: linear-gradient(135deg, #2b0000, #400000); box-shadow: 0 0 15px rgba(255, 0, 0, 0.3); color: white; }
-.wet { background: linear-gradient(135deg, #1a0505, #330a0a); box-shadow: 0 0 15px rgba(255, 0, 0, 0.3); }
-
-.prediction:hover, .avg:hover, .full:hover, .dry:hover, .wet:hover {
-    box-shadow: 0 0 25px rgba(255, 0, 0, 0.8);
+/* Individual Neon Glows on Hover */
+.prediction:hover { box-shadow: 0 0 25px rgba(99, 102, 241, 0.9); }
+.avg:hover { box-shadow: 0 0 25px rgba(16, 185, 129, 0.9); }
+.full:hover { box-shadow: 0 0 25px rgba(239, 68, 68, 0.9); }
+.dry:hover { box-shadow: 0 0 25px rgba(245, 158, 11, 0.9); }
+.wet:hover { box-shadow: 0 0 25px rgba(59, 130, 246, 0.9); }
 }
 
 /* =========================================
