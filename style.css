@@ -170,9 +170,32 @@ h2 {
     font-weight: bold;
 }
 
-/* Dashboard Card Colors */
-.prediction { background: linear-gradient(135deg, #6366f1, #a5b4fc); }
-.avg { background: linear-gradient(135deg, #10b981, #6ee7b7); }
-.full { background: linear-gradient(135deg, #ef4444, #fca5a5); }
-.dry { background: linear-gradient(135deg, #f59e0b, #fde68a); color: black; }
-.wet { background: linear-gradient(135deg, #3b82f6, #93c5fd); }
+/* Dashboard Card Colors with Neon Glow */
+.prediction { 
+    background: linear-gradient(135deg, #6366f1, #a5b4fc); 
+    box-shadow: 0 0 15px rgba(99, 102, 241, 0.5);
+}
+.avg { 
+    background: linear-gradient(135deg, #10b981, #6ee7b7); 
+    box-shadow: 0 0 15px rgba(16, 185, 129, 0.5);
+}
+.full { 
+    background: linear-gradient(135deg, #ef4444, #fca5a5); 
+    box-shadow: 0 0 15px rgba(239, 68, 68, 0.5);
+}
+.dry { 
+    background: linear-gradient(135deg, #f59e0b, #fde68a); 
+    color: black; 
+    box-shadow: 0 0 15px rgba(245, 158, 11, 0.5);
+}
+.wet { 
+    background: linear-gradient(135deg, #3b82f6, #93c5fd); 
+    box-shadow: 0 0 15px rgba(59, 130, 246, 0.5);
+}
+
+/* Make the glow get even brighter when you hover over a card! */
+.prediction:hover { box-shadow: 0 0 25px rgba(99, 102, 241, 0.9); }
+.avg:hover { box-shadow: 0 0 25px rgba(16, 185, 129, 0.9); }
+.full:hover { box-shadow: 0 0 25px rgba(239, 68, 68, 0.9); }
+.dry:hover { box-shadow: 0 0 25px rgba(245, 158, 11, 0.9); }
+.wet:hover { box-shadow: 0 0 25px rgba(59, 130, 246, 0.9); }
